@@ -1,4 +1,4 @@
-// App.js
+// src/App.js
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -8,6 +8,7 @@ import Profile from './components/Profile';
 import Register from './components/Register';
 import { userState } from './states/atoms';
 import ProtectedRoute from './components/ProtectedRoute';
+import PublicRoute from './components/PublicRoute';
 import { loadFromLocalStorage } from './utils/storage';
 
 const App = () => {
@@ -24,8 +25,8 @@ const App = () => {
     <div className='app'>
       <BrowserRouter>
         <Routes>
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<PublicRoute element={<Login />} />} />
+          <Route path='/register' element={<PublicRoute element={<Register />} />} />
           <Route path='/' element={<ProtectedRoute element={<HomePage />} />} />
           <Route path='/profile/:userId' element={<ProtectedRoute element={<Profile />} />} />
         </Routes>
