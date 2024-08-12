@@ -25,8 +25,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className='bg-gray-800 h-14 flex justify-between items-center px-12'>
-      <div className='flex items-center justify-center'>
+    <div className='bg-gray-800 h-14 flex justify-between items-center px-12 shadow-md '>
+      <div className='flex items-center justify-center cursor-pointer' onClick={() => navigate('/')}>
         <img className='w-8' src='https://res.cloudinary.com/dual7doua/image/upload/v1723401411/fxvmfncunwqiteeciwua.png' alt='Scrol Logo'/>
         <h1 className='text-white font-semibold ml-2'>SCROL</h1>
       </div>

@@ -4,7 +4,8 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../states/atoms';
 import axios from 'axios';
 import Navbar from './Navbar';
-import PostCard from './PostCard';
+import PostCard from './Postcard';
+import CreatePostWidget from './CreatePostWidget'; // Import CreatePostWidget
 
 const Profile = () => {
   const { userId } = useParams(); // Get userId from URL parameters
@@ -45,11 +46,6 @@ const Profile = () => {
     fetchPosts();
   }, [userId]);
 
-  const handleCreatePost = () => {
-    // Handle create post logic
-    console.log('Create Post button clicked');
-  };
-
   if (loading) {
     return <div className="min-h-screen bg-gray-900 text-white">Loading...</div>;
   }
@@ -60,28 +56,29 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <Navbar />
+      </div>
       <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row items-center">
+        <div className="flex flex-col md:flex-row items-start md:items-center">
           <div className="md:w-1/4 flex justify-center mb-4 md:mb-0">
             <img
               src={profile.avatar || 'https://via.placeholder.com/150'}
               alt="Profile"
-              className="w-32 h-32 rounded-full border-4 border-blue-600"
+              className="w-48 h-48 rounded-full border-4 border-blue-600"
             />
           </div>
-          <div className="md:w-3/4 md:pl-6">
-            <h1 className="text-3xl font-semibold">{profile.firstName} {profile.lastName}</h1>
-            <p className="text-gray-400 mt-2">{profile.username}</p>
-            <p className="text-gray-400 mt-2">{profile.email}</p>
-            <p className="text-gray-400 mt-2">{profile.bio}</p>
+          <div className="md:w-3/4 md:pl-6 flex flex-col md:flex-row items-start md:items-center gap-48">
+            <div className="flex-col">
+              <h1 className="text-3xl font-semibold">{profile.firstName} {profile.lastName}</h1>
+              <p className="text-gray-400 mt-2">{profile.username}</p>
+              <p className="text-gray-400 mt-2">{profile.email}</p>
+              <p className="text-gray-400 mt-2">{profile.bio}</p>
+            </div>
             {user && user._id === profile._id && (
-              <button
-                onClick={handleCreatePost}
-                className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded"
-              >
-                Create Post
-              </button>
+              <div className="mt-4 md:mt-0 ml-4">
+                <CreatePostWidget /> {/* Replace button with CreatePostWidget */}
+              </div>
             )}
           </div>
         </div>
