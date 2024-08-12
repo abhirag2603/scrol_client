@@ -47,7 +47,7 @@ const FeedPost = () => {
             description={post.description}
             likes={post.likes}
             postId={post._id}
-            user={user}
+            userId={post.userId}
             onLike={handleLike}
           />
         ))

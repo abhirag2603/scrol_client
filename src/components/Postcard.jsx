@@ -1,38 +1,66 @@
-import React,{useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { userState } from '../states/atoms';
+import { useRecoilState } from 'recoil';
 
-const PostCard = ({ userPicturePath, username, picture, description, likes, postId, user, onLike }) => {
-  const likeCount = Object.keys(likes).length;
+const PostCard = ({
+  postId: postId,
+  username,
+  userId, // Updated from postUserId
+  firstName,
+  lastName,
+  description,
+  picture,
+  userPicturePath,
+  likes = {}, // Default value as an empty object
+  onLike,
+}) => {
+  const likeCount = Object.keys(likes || {}).length;
   const [liked, setLiked] = useState(false);
+  const navigate = useNavigate();
+  const [user, setUser] = useRecoilState(userState);
 
-  // Check if the current user has liked the post when component mounts
   useEffect(() => {
     setLiked(likes[user._id] || false);
   }, [likes, user._id]);
 
   const handleLike = async () => {
     try {
-      await axios.patch(`http://localhost:8000/posts/${postId}/like`, { userId: user._id }, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      // Toggle the liked state
+      await axios.patch(
+        `http://localhost:8000/posts/${postId}/like`, // Update this line to use `postId` instead of `user._id`
+        { userId: user._id },
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       setLiked(!liked);
-      // Call the onLike callback to refresh posts
-      onLike();
+      onLike(); // Call the onLike callback to refresh posts
     } catch (error) {
       console.error('Error liking post:', error);
     }
   };
 
+  const redirectToProfile = () => {
+    navigate(`/profile/${userId}`);
+  };
+
   return (
     <div className="bg-gray-800 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl mb-4 mx-auto max-w-md sm:max-w-sm md:max-w-lg">
       <div className="p-4 flex items-center space-x-4">
-        <img className="w-12 h-12 rounded-full" src={userPicturePath} alt={username} />
-        <div>
-          <h2 className="text-white text-lg font-semibold">{username}</h2>
+        <img
+          className="w-12 h-12 rounded-full cursor-pointer"
+          src={userPicturePath || 'https://via.placeholder.com/150'}
+          alt={`${firstName} ${lastName}`}
+          onClick={redirectToProfile}
+        />
+        <div className="flex justify-between w-full">
+          <h2 className="text-white text-lg font-semibold cursor-pointer" onClick={redirectToProfile}>
+            {firstName} {lastName} (@{username})
+          </h2>
         </div>
       </div>
       <img className="w-full h-64 object-cover" src={picture} alt="Post" />

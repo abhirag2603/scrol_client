@@ -6,6 +6,7 @@ import Login from './components/Login';
 import HomePage from './components/HomePage';
 import Profile from './components/Profile';
 import Register from './components/Register';
+import UserProfile from './components/Register';
 import { userState } from './states/atoms';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
