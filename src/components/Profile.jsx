@@ -14,37 +14,49 @@ const Profile = () => {
   const [posts, setPosts] = useState([]); // State to hold user's posts
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/posts/${userId}/posts`, {
+        withCredentials: true,
+      });
+      setPosts(response.data);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      setError('Error fetching posts');
+    }
+  };
+
+  const fetchProfile = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/users/${userId}`, {
+        withCredentials: true,
+      });
+      setProfile(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      setError('Error fetching profile');
+      setLoading(false);
+    }
+  };
+
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8000/users/${userId}`, {
-          withCredentials: true,
-        });
-        setProfile(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-        setError('Error fetching profile');
-        setLoading(false);
-      }
-    };
-
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8000/posts/${userId}/posts`, {
-          withCredentials: true,
-        });
-        setPosts(response.data);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-        setError('Error fetching posts');
-      }
-    };
-
     fetchProfile();
     fetchPosts();
   }, [userId]);
+
+  const handleLike=()=>{
+    fetchPosts();
+  }
+
+  const handleDelete=()=>{
+    fetchPosts();
+  }
+  const handlePostCreated = () => {
+    fetchPosts(); // Refresh posts after a new post is created
+  };
 
   if (loading) {
     return <div className="min-h-screen bg-gray-900 text-white">Loading...</div>;
@@ -77,7 +89,7 @@ const Profile = () => {
             </div>
             {user && user._id === profile._id && (
               <div className="mt-4 md:mt-0 ml-4">
-                <CreatePostWidget /> {/* Replace button with CreatePostWidget */}
+                <CreatePostWidget onPostCreated={handlePostCreated} /> {/* Replace button with CreatePostWidget */}
               </div>
             )}
           </div>
@@ -89,7 +101,7 @@ const Profile = () => {
               posts.map(post => (
                 <PostCard
                   key={post._id}
-                  _id={post._id}
+                  postId={post._id}
                   username={post.username}
                   userId={post.userId}
                   firstName={post.firstName}
@@ -98,7 +110,8 @@ const Profile = () => {
                   picture={post.picture}
                   userPicturePath={post.userPicturePath}
                   likes={post.likes || []} // Ensure likes is an array
-                  onLike={() => fetchPosts()} // Refresh posts after liking
+                  onLike={handleLike}
+                  onDelete={handleDelete} // Refresh posts after liking
                 />
               ))
             ) : (

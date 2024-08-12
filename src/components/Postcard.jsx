@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { userState } from '../states/atoms';
 import { useRecoilState } from 'recoil';
+import { userState } from '../states/atoms';
 
 const PostCard = ({
-  postId: postId,
+  postId,
   username,
-  userId, // Updated from postUserId
+  userId, 
   firstName,
   lastName,
   description,
   picture,
   userPicturePath,
-  likes = {}, // Default value as an empty object
+  likes = {}, 
   onLike,
+  onDelete,
+  onCreate, // Callback to refresh posts after deletion
 }) => {
   const likeCount = Object.keys(likes || {}).length;
   const [liked, setLiked] = useState(false);
   const navigate = useNavigate();
-  const [user, setUser] = useRecoilState(userState);
+  const [user] = useRecoilState(userState);
 
   useEffect(() => {
     setLiked(likes[user._id] || false);
@@ -28,7 +30,7 @@ const PostCard = ({
   const handleLike = async () => {
     try {
       await axios.patch(
-        `http://localhost:8000/posts/${postId}/like`, // Update this line to use `postId` instead of `user._id`
+        `http://localhost:8000/posts/${postId}/like`,
         { userId: user._id },
         {
           withCredentials: true,
@@ -38,11 +40,33 @@ const PostCard = ({
         }
       );
       setLiked(!liked);
-      onLike(); // Call the onLike callback to refresh posts
+      onLike(); // Refresh posts after liking
     } catch (error) {
       console.error('Error liking post:', error);
     }
   };
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm('Are you sure you want to delete this post?');
+    if (confirmed) {
+      try {
+        await axios.delete(
+          `http://localhost:8000/posts/delete`,
+          {
+            data: { postId: postId }, // `data` key should be used for the body in DELETE request
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json', // Include the token here
+            },
+          }
+        ); 
+        onDelete();// Refresh posts after deletion
+      } catch (error) {
+        console.error('Error deleting post:', error);
+      }
+    }
+  };
+  
 
   const redirectToProfile = () => {
     navigate(`/profile/${userId}`);
@@ -61,6 +85,14 @@ const PostCard = ({
           <h2 className="text-white text-lg font-semibold cursor-pointer" onClick={redirectToProfile}>
             {firstName} {lastName} (@{username})
           </h2>
+          {user._id === userId && (
+            <button
+              className="ml-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          )}
         </div>
       </div>
       <img className="w-full h-64 object-cover" src={picture} alt="Post" />

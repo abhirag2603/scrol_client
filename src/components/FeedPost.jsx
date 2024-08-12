@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 import PostCard from './Postcard';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../states/atoms';
 
-const FeedPost = () => {
+const FeedPost = forwardRef((props, ref) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const user = useRecoilValue(userState);
@@ -29,8 +29,18 @@ const FeedPost = () => {
     fetchPosts();
   }, []);
 
+  useImperativeHandle(ref, () => ({
+    refreshPosts() {
+      fetchPosts();
+    },
+  }));
+
   const handleLike = async () => {
     await fetchPosts(); // Refresh posts after liking
+  };
+
+  const handleDelete = () => {
+    fetchPosts(); // Refresh posts after deletion
   };
 
   return (
@@ -49,11 +59,12 @@ const FeedPost = () => {
             postId={post._id}
             userId={post.userId}
             onLike={handleLike}
+            onDelete={handleDelete}
           />
         ))
       )}
     </div>
   );
-};
+});
 
 export default FeedPost;

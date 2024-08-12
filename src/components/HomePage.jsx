@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { userState } from '../states/atoms';
 import FeedPost from './FeedPost';
 import Navbar from './Navbar';
 import UserCard from './UserCard';
-import CreatePostWidget from './CreatePostWidget'
+import CreatePostWidget from './CreatePostWidget';
 
 const HomePage = () => {
   const [user] = useRecoilState(userState);
   const navigate = useNavigate();
+  const feedPostRef = useRef(null);
+
+  const handlePostCreated = () => {
+    if (feedPostRef.current) {
+      feedPostRef.current.refreshPosts();
+    }
+  };
 
   return (
     <div className="bg-gray-900 min-h-screen cursor-pointer">
@@ -25,12 +32,11 @@ const HomePage = () => {
         </div>
 
         <div className="lg:w-1/2">
-          <FeedPost />
+          <FeedPost ref={feedPostRef} />
         </div>
 
-      
         <div className="hidden lg:block lg:w-1/4">
-          <CreatePostWidget />
+          <CreatePostWidget onPostCreated={handlePostCreated} />
         </div>
       </div>
     </div>

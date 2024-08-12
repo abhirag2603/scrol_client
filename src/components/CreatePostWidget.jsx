@@ -4,7 +4,7 @@ import { userState } from '../states/atoms';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 
-const CreatePostWidget = () => {
+const CreatePostWidget = ({ onPostCreated }) => {
   const [user] = useRecoilState(userState);
   const [file, setFile] = useState(null);
   const [description, setDescription] = useState('');
@@ -15,7 +15,6 @@ const CreatePostWidget = () => {
     if (acceptedFiles?.length) {
       const selectedFile = acceptedFiles[0];
       setFile(selectedFile);
-      // Create a preview URL for the selected file
       const filePreviewUrl = URL.createObjectURL(selectedFile);
       setPreview(filePreviewUrl);
     }
@@ -23,7 +22,7 @@ const CreatePostWidget = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: 'image/*' // Ensure only image files can be uploaded
+    accept: 'image/*'
   });
 
   const handleDescriptionChange = (e) => {
@@ -38,10 +37,10 @@ const CreatePostWidget = () => {
 
     const formData = new FormData();
     formData.append('picture', file);
-    formData.append('username', user.username); // Include username in form data
+    formData.append('username', user.username);
     formData.append('description', description);
 
-    setLoading(true); // Start loading animation
+    setLoading(true);
 
     try {
       const response = await axios.post('http://localhost:8000/posts/createpost', formData, {
@@ -54,10 +53,13 @@ const CreatePostWidget = () => {
       setFile(null);
       setPreview('');
       setDescription('');
+      if (onPostCreated) {
+        onPostCreated(); // Trigger the callback to refresh posts
+      }
     } catch (error) {
       console.error('Error creating post:', error);
     } finally {
-      setLoading(false); // Stop loading animation
+      setLoading(false);
     }
   };
 
@@ -65,7 +67,6 @@ const CreatePostWidget = () => {
     <div className='max-w-sm bg-gray-800 text-white shadow-lg rounded-lg overflow-hidden my-4 p-4'>
       <h2 className='text-xl font-semibold mb-4'>Create a Post</h2>
 
-      {/* File Upload Section */}
       <div 
         {...getRootProps()} 
         className={`border-2 border-gray-700 bg-gray-900 text-white rounded p-4 mb-4 ${
@@ -73,33 +74,30 @@ const CreatePostWidget = () => {
         }`}
       >
         <input {...getInputProps()} />
-        {
-          preview ? (
-            <div className='relative'>
-              <img
-                src={preview}
-                alt='Preview'
-                className='w-full h-48 object-cover rounded'
-              />
-              <button
-                onClick={() => {
-                  setFile(null);
-                  setPreview('');
-                }}
-                className='absolute top-2 right-2 text-gray-300 hover:text-white'
-              >
-                X
-              </button>
-            </div>
-          ) : (
-            isDragActive ? 
-              <p>Drop the file here...</p> :
-              <p>Drag 'n' drop a file here, or click to select one</p>
-          )
-        }
+        {preview ? (
+          <div className='relative'>
+            <img
+              src={preview}
+              alt='Preview'
+              className='w-full h-48 object-cover rounded'
+            />
+            <button
+              onClick={() => {
+                setFile(null);
+                setPreview('');
+              }}
+              className='absolute top-2 right-2 text-gray-300 hover:text-white'
+            >
+              X
+            </button>
+          </div>
+        ) : (
+          isDragActive ? 
+            <p>Drop the file here...</p> :
+            <p>Drag 'n' drop a file here, or click to select one</p>
+        )}
       </div>
 
-      {/* Description Input Section */}
       <textarea
         value={description}
         onChange={handleDescriptionChange}
@@ -108,11 +106,10 @@ const CreatePostWidget = () => {
         placeholder='Write a description...'
       />
 
-      {/* Create Post Button */}
       <button
         onClick={handlePostCreation}
         className='bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded'
-        disabled={loading} // Disable button while loading
+        disabled={loading}
       >
         {loading ? (
           <div className='flex items-center'>
