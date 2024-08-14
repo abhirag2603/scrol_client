@@ -5,7 +5,8 @@ import { userState } from '../states/atoms';
 import axios from 'axios';
 import Navbar from './Navbar';
 import PostCard from './Postcard';
-import CreatePostWidget from './CreatePostWidget'; // Import CreatePostWidget
+import CreatePostWidget from './CreatePostWidget'; 
+import { useNavigate } from 'react-router-dom';// Import CreatePostWidget
 
 const Profile = () => {
   const { userId } = useParams(); // Get userId from URL parameters
@@ -14,6 +15,8 @@ const Profile = () => {
   const [posts, setPosts] = useState([]); // State to hold user's posts
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isFriend, setIsFriend] = useState(false);
+  const navigate= useNavigate(); // State to track friendship status
   
   const fetchPosts = async () => {
     try {
@@ -34,6 +37,7 @@ const Profile = () => {
       });
       setProfile(response.data);
       setLoading(false);
+      setIsFriend(user.friends.includes(userId)); // Check if the profile user is already a friend
     } catch (error) {
       console.error('Error fetching profile:', error);
       setError('Error fetching profile');
@@ -41,6 +45,31 @@ const Profile = () => {
     }
   };
 
+  const handleFriendAction = async () => {
+    try {
+      // Step 1: Update the friend status on the server
+      await axios.patch(`http://localhost:8000/users/${user._id}/${userId}`, {}, {
+        withCredentials: true,
+      });
+  
+      // Step 2: Fetch the updated user data
+      const response = await axios.get(`http://localhost:8000/users/${user._id}`, {
+        withCredentials: true,
+      });
+      const updatedUser = response.data;
+  
+      // Step 3: Update Recoil state and local storage
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+  
+      // Update the local `isFriend` state
+      setIsFriend(updatedUser.friends.includes(userId));
+  
+    } catch (error) {
+      console.error('Error updating friend status:', error);
+    }
+  };
+  
 
   useEffect(() => {
     fetchProfile();
@@ -81,16 +110,30 @@ const Profile = () => {
             />
           </div>
           <div className="md:w-3/4 md:pl-6 flex flex-col md:flex-row items-start md:items-center gap-48">
-            <div className="flex-col">
+            <div className="flex-col gap-4">
               <h1 className="text-3xl font-semibold">{profile.firstName} {profile.lastName}</h1>
               <p className="text-gray-400 mt-2">{profile.username}</p>
               <p className="text-gray-400 mt-2">{profile.email}</p>
-              <p className="text-gray-400 mt-2">{profile.bio}</p>
+              {user && user._id === profile._id && (
+                   <button
+                    className="mt-2 px-4 py-2 rounded bg-blue-600"
+                     onClick={() => navigate(`/edit-profile`)}
+                       >
+                           Edit Profile
+                         </button>
+)}
             </div>
-            {user && user._id === profile._id && (
+            {user && user._id === profile._id ? (
               <div className="mt-4 md:mt-0 ml-4">
                 <CreatePostWidget onPostCreated={handlePostCreated} /> {/* Replace button with CreatePostWidget */}
               </div>
+            ) : (
+              <button
+                className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : 'bg-green-600'}`}
+                onClick={handleFriendAction}
+              >
+                {isFriend ? 'Remove Friend' : 'Add Friend'}
+              </button>
             )}
           </div>
         </div>
