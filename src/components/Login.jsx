@@ -6,7 +6,7 @@ import axios from 'axios';
 import Navbar from './Navbar';
 const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
 const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
-console.log(baseUrlLocal)
+
 
 const Login = () => {
   const [formData, setFormData] = useRecoilState(loginState);
