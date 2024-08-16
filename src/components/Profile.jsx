@@ -119,7 +119,7 @@ const Profile = () => {
             <div className="flex-col gap-4">
               <h1 className="text-3xl font-semibold">{profile.firstName} {profile.lastName}</h1>
               <p className="text-gray-400 mt-2">{profile.username}</p>
-              <p className="text-gray-400 mt-2">{profile.email}</p>
+              {user && user._id === profile._id && (<p className="text-gray-400 mt-2">{profile.email}</p>)}
               {user && user._id === profile._id && (
                 <button
                   className="mt-2 px-4 py-2 rounded bg-blue-600"
