@@ -91,7 +91,7 @@ const Profile = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 text-white flex justify-center items-center">
-        <img src="loading.gif" alt="Loading..." className="w-16 h-16" />
+        <img src="../public/loading.gif" alt="Loading..." className="w-16 h-16" />
       </div>
     );
   }
