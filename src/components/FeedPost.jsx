@@ -48,7 +48,9 @@ const FeedPost = forwardRef((props, ref) => {
   return (
     <div className='mb-40'>
       {loading ? (
-        <p>Loading...</p>
+        <div className="flex justify-center items-center min-h-screen">
+          <img src="loading.gif" alt="Loading..." className="w-16 h-16" />
+        </div>
       ) : (
         posts.map(post => (
           <PostCard

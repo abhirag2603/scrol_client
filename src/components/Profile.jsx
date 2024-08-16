@@ -89,7 +89,11 @@ const Profile = () => {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-900 text-white">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex justify-center items-center">
+        <img src="../public/loading.gif" alt="Loading..." className="w-16 h-16" />
+      </div>
+    );
   }
 
   if (error) {
@@ -104,11 +108,11 @@ const Profile = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-start md:items-center">
           <div className="md:w-1/4 flex justify-center mb-4 md:mb-0">
-            <img
-              src={profile.avatar || 'https://via.placeholder.com/150'}
-              alt="Profile"
-              className="w-48 h-48 rounded-full border-4 border-blue-600"
-            />
+          <img
+                    className="w-32 h-32 object-cover rounded-full border-4 border-blue-600"
+                    src={profile.avatar || "https://via.placeholder.com/150"}
+                    alt="avatar"
+                />
           </div>
           <div className="md:w-3/4 md:pl-6 flex flex-col md:flex-row items-start md:items-center gap-48">
             <div className="flex-col gap-4">

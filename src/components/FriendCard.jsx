@@ -9,8 +9,6 @@ const FriendCard = ({friendId}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  console.log(friendId)
-
   const fetchProfile = async () => {
     try {
       const response = await axios.get(`${baseUrlLocal}/users/${friendId}`, {

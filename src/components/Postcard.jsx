@@ -78,7 +78,7 @@ const PostCard = ({
     <div className="bg-gray-800 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl mb-4 mx-auto max-w-md sm:max-w-sm md:max-w-lg">
       <div className="p-4 flex items-center space-x-4">
       {userPicturePath && <img
-        className="w-12 h-12 rounded-full cursor-pointer"
+        className="w-8 h-8 rounded-full cursor-pointer"
         src={userPicturePath || 'https://via.placeholder.com/150'}
         alt={`${firstName} ${lastName}`}
         onClick={redirectToProfile}
