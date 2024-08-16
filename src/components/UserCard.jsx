@@ -2,6 +2,8 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import { userState } from '../states/atoms';
 import { useNavigate } from 'react-router-dom';
+const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
 
 const UserCard = () => {
     const [user, setUser] = useRecoilState(userState);

@@ -3,6 +3,8 @@ import axios from 'axios';
 import PostCard from './Postcard';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../states/atoms';
+const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
 
 const FeedPost = forwardRef((props, ref) => {
   const [posts, setPosts] = useState([]);
@@ -11,7 +13,7 @@ const FeedPost = forwardRef((props, ref) => {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/posts/getfeedposts', {
+      const response = await axios.get(`${baseUrlLocal}/posts/getfeedposts`, {
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json',

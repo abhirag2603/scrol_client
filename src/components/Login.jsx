@@ -4,6 +4,9 @@ import { loginState, userState } from '../states/atoms';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
+const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
+console.log(baseUrlLocal)
 
 const Login = () => {
   const [formData, setFormData] = useRecoilState(loginState);
@@ -21,7 +24,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:8000/users/login',
+        `${baseUrlLocal}/users/login`,
         formData,
         {
           withCredentials: true,

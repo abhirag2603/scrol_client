@@ -4,6 +4,11 @@ import { userState } from '../states/atoms';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 
+// Use appropriate base URL based on the environment
+const baseUrl = import.meta.env.MODE === 'production' 
+    ? import.meta.env.VITE_BASE_URL_RENDER 
+    : import.meta.env.VITE_BASE_URL_LOCAL;
+
 const CreatePostWidget = ({ onPostCreated }) => {
   const [user] = useRecoilState(userState);
   const [file, setFile] = useState(null);
@@ -22,7 +27,7 @@ const CreatePostWidget = ({ onPostCreated }) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: 'image/*'
+    accept: 'image/*',
   });
 
   const handleDescriptionChange = (e) => {
@@ -30,20 +35,22 @@ const CreatePostWidget = ({ onPostCreated }) => {
   };
 
   const handlePostCreation = async () => {
-    if (!file || !description) {
-      alert('Please provide a file and description.');
+    if (!description) {
+      alert('Please provide a description.');
       return;
     }
 
     const formData = new FormData();
-    formData.append('picture', file);
+    if (file) {
+      formData.append('picture', file);
+    }
     formData.append('username', user.username);
     formData.append('description', description);
 
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/posts/createpost', formData, {
+      const response = await axios.post(`${baseUrl}/posts/createpost`, formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -57,7 +64,7 @@ const CreatePostWidget = ({ onPostCreated }) => {
         onPostCreated(); // Trigger the callback to refresh posts
       }
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error('Error creating post:', error.response || error.message);
     } finally {
       setLoading(false);
     }

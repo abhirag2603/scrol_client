@@ -4,6 +4,8 @@ import { userState } from '../states/atoms';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
+const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
 
 const EditProfile = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -60,7 +62,7 @@ const EditProfile = () => {
         formDataWithAvatar.append('username', updatedData.username);
         formDataWithAvatar.append('avatar', avatarFile);
 
-        const response = await axios.patch(`http://localhost:8000/users/${user._id}`, formDataWithAvatar, {
+        const response = await axios.patch(`${baseUrlLocal}/users/${user._id}`, formDataWithAvatar, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -71,7 +73,7 @@ const EditProfile = () => {
         localStorage.setItem('user', JSON.stringify(updatedUser));
         navigate(`/profile/${user._id}`);
       } else {
-        const response = await axios.patch(`http://localhost:8000/users/${user._id}`, updatedData, {
+        const response = await axios.patch(`${baseUrlLocal}/users/${user._id}`, updatedData, {
           withCredentials: true,
         });
         const updatedUser = response.data;
@@ -123,7 +125,7 @@ const EditProfile = () => {
             className="w-full p-2 rounded bg-gray-700 text-white"
           />
         </div>
-
+        <label className="block text-sm font-medium mb-1">Avatar</label>
         <div
           {...getRootProps()}
           className={`mb-4 p-4 border-2 border-dashed border-gray-600 rounded cursor-pointer ${

@@ -5,22 +5,26 @@ import { userState } from '../states/atoms';
 import axios from 'axios';
 import Navbar from './Navbar';
 import PostCard from './Postcard';
-import CreatePostWidget from './CreatePostWidget'; 
-import { useNavigate } from 'react-router-dom';// Import CreatePostWidget
+import CreatePostWidget from './CreatePostWidget';
+import { useNavigate } from 'react-router-dom';
+import FriendCard from './FriendCard'; // Import FriendCard
+const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
 
 const Profile = () => {
-  const { userId } = useParams(); // Get userId from URL parameters
+  const { userId } = useParams();
   const [user, setUser] = useRecoilState(userState);
   const [profile, setProfile] = useState({});
-  const [posts, setPosts] = useState([]); // State to hold user's posts
+  const [posts, setPosts] = useState([]);
+  const [friends, setFriends] = useState([]); // State to hold friends
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isFriend, setIsFriend] = useState(false);
-  const navigate= useNavigate(); // State to track friendship status
-  
+  const navigate = useNavigate();
+
   const fetchPosts = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/posts/${userId}/posts`, {
+      const response = await axios.get(`${baseUrlLocal}/posts/${userId}/posts`, {
         withCredentials: true,
       });
       setPosts(response.data);
@@ -32,12 +36,13 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/users/${userId}`, {
+      const response = await axios.get(`${baseUrlLocal}/users/${userId}`, {
         withCredentials: true,
       });
       setProfile(response.data);
+      setFriends(response.data.friends || []); // Set friends state
       setLoading(false);
-      setIsFriend(user.friends.includes(userId)); // Check if the profile user is already a friend
+      setIsFriend(user.friends.includes(userId));
     } catch (error) {
       console.error('Error fetching profile:', error);
       setError('Error fetching profile');
@@ -47,44 +52,40 @@ const Profile = () => {
 
   const handleFriendAction = async () => {
     try {
-      // Step 1: Update the friend status on the server
-      await axios.patch(`http://localhost:8000/users/${user._id}/${userId}`, {}, {
+      await axios.patch(`${baseUrlLocal}/users/${user._id}/${userId}`, {}, {
         withCredentials: true,
       });
-  
-      // Step 2: Fetch the updated user data
-      const response = await axios.get(`http://localhost:8000/users/${user._id}`, {
+
+      const response = await axios.get(`${baseUrlLocal}/users/${user._id}`, {
         withCredentials: true,
       });
       const updatedUser = response.data;
-  
-      // Step 3: Update Recoil state and local storage
+
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser));
-  
-      // Update the local `isFriend` state
+
       setIsFriend(updatedUser.friends.includes(userId));
-  
+
     } catch (error) {
       console.error('Error updating friend status:', error);
     }
   };
-  
 
   useEffect(() => {
     fetchProfile();
     fetchPosts();
   }, [userId]);
 
-  const handleLike=()=>{
+  const handleLike = () => {
     fetchPosts();
-  }
+  };
 
-  const handleDelete=()=>{
+  const handleDelete = () => {
     fetchPosts();
-  }
+  };
+
   const handlePostCreated = () => {
-    fetchPosts(); // Refresh posts after a new post is created
+    fetchPosts();
   };
 
   if (loading) {
@@ -115,17 +116,17 @@ const Profile = () => {
               <p className="text-gray-400 mt-2">{profile.username}</p>
               <p className="text-gray-400 mt-2">{profile.email}</p>
               {user && user._id === profile._id && (
-                   <button
-                    className="mt-2 px-4 py-2 rounded bg-blue-600"
-                     onClick={() => navigate(`/edit-profile`)}
-                       >
-                           Edit Profile
-                         </button>
-)}
+                <button
+                  className="mt-2 px-4 py-2 rounded bg-blue-600"
+                  onClick={() => navigate(`/edit-profile`)}
+                >
+                  Edit Profile
+                </button>
+              )}
             </div>
             {user && user._id === profile._id ? (
               <div className="mt-4 md:mt-0 ml-4">
-                <CreatePostWidget onPostCreated={handlePostCreated} /> {/* Replace button with CreatePostWidget */}
+                <CreatePostWidget onPostCreated={handlePostCreated} />
               </div>
             ) : (
               <button
@@ -152,9 +153,9 @@ const Profile = () => {
                   description={post.description}
                   picture={post.picture}
                   userPicturePath={post.userPicturePath}
-                  likes={post.likes || []} // Ensure likes is an array
+                  likes={post.likes || []}
                   onLike={handleLike}
-                  onDelete={handleDelete} // Refresh posts after liking
+                  onDelete={handleDelete}
                 />
               ))
             ) : (
@@ -165,17 +166,12 @@ const Profile = () => {
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Friends</h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {profile.friends && profile.friends.length ? (
-              profile.friends.map(friend => (
-                <div key={friend._id} className="bg-gray-800 p-4 rounded-lg shadow-lg">
-                  <img
-                    src={friend.avatar || 'https://via.placeholder.com/50'}
-                    alt="Friend"
-                    className="w-12 h-12 rounded-full border-2 border-blue-600"
-                  />
-                  <h3 className="text-xl font-semibold mt-2">{friend.firstName} {friend.lastName}</h3>
-                  <p className="text-gray-400">{friend._id}</p>
-                </div>
+            {friends.length ? (
+              friends.map(friend => (
+                <FriendCard
+                  key={friend._id}
+                  friendId={friend}
+                />
               ))
             ) : (
               <p className="text-gray-400">No friends available.</p>

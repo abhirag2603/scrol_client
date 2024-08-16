@@ -4,6 +4,8 @@ import { registerState, userState } from '../states/atoms';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar'; // Import Navbar component
+const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
 
 const Register = () => {
   const [formData, setFormData] = useRecoilState(registerState);
@@ -21,7 +23,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:8000/users/register',
+        `${baseUrlLocal}/users/register`,
         formData,
         {
           withCredentials: true,

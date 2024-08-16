@@ -3,6 +3,8 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../states/atoms';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
 
 const Navbar = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -10,7 +12,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:8000/users/logout', {}, {
+      await axios.post(`${baseUrlLocal}/users/logout`, {}, {
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json',

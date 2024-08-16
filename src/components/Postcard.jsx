@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { userState } from '../states/atoms';
+const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
 
 const PostCard = ({
   postId,
@@ -30,7 +32,7 @@ const PostCard = ({
   const handleLike = async () => {
     try {
       await axios.patch(
-        `http://localhost:8000/posts/${postId}/like`,
+        `${baseUrlLocal}/posts/${postId}/like`,
         { userId: user._id },
         {
           withCredentials: true,
@@ -51,7 +53,7 @@ const PostCard = ({
     if (confirmed) {
       try {
         await axios.delete(
-          `http://localhost:8000/posts/delete`,
+          `${baseUrlLocal}/posts/delete`,
           {
             data: { postId: postId }, // `data` key should be used for the body in DELETE request
             withCredentials: true,
@@ -75,12 +77,12 @@ const PostCard = ({
   return (
     <div className="bg-gray-800 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl mb-4 mx-auto max-w-md sm:max-w-sm md:max-w-lg">
       <div className="p-4 flex items-center space-x-4">
-        <img
-          className="w-12 h-12 rounded-full cursor-pointer"
-          src={userPicturePath || 'https://via.placeholder.com/150'}
-          alt={`${firstName} ${lastName}`}
-          onClick={redirectToProfile}
-        />
+      {userPicturePath && <img
+        className="w-12 h-12 rounded-full cursor-pointer"
+        src={userPicturePath || 'https://via.placeholder.com/150'}
+        alt={`${firstName} ${lastName}`}
+        onClick={redirectToProfile}
+      />}
         <div className="flex justify-between w-full">
           <h2 className="text-white text-lg font-semibold cursor-pointer" onClick={redirectToProfile}>
             {firstName} {lastName} (@{username})
@@ -95,7 +97,7 @@ const PostCard = ({
           )}
         </div>
       </div>
-      <img className="w-full h-64 object-cover" src={picture} alt="Post" />
+     {picture && <img className="w-full h-64 object-cover" src={picture} alt="Post" />}
       <div className="p-4">
         <p className="text-gray-300 mb-2">{description}</p>
         <div className="flex items-center space-x-4">
