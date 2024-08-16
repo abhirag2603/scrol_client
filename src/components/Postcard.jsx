@@ -101,7 +101,11 @@ const PostCard = ({
         </div>
       </div>
       {picture && (
-        <img className="w-full h-64 object-cover rounded-b-lg" src={picture} alt="Post" />
+        <img
+          className="w-full object-contain rounded-b-lg" // Remove fixed height and use object-contain
+          src={picture}
+          alt="Post"
+        />
       )}
       <div className="p-4">
         <p className="text-gray-300 mb-2 break-words">{description}</p>
