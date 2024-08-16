@@ -48,7 +48,7 @@ const FeedPost = forwardRef((props, ref) => {
   return (
     <div className='mb-40'>
       {loading ? (
-        <div className="flex justify-center items-center min-h-screen">
+        <div className="flex justify-center items-center max-h-screen">
           <img src="loading.gif" alt="Loading..." className="w-16 h-16" />
         </div>
       ) : (
