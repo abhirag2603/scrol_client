@@ -4,9 +4,9 @@ import { loginState, userState } from '../states/atoms';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
-const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
-const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
 
+const baseUrlLocal = import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrlRender = import.meta.env.VITE_BASE_URL_RENDER;
 
 const Login = () => {
   const [formData, setFormData] = useRecoilState(loginState);
@@ -47,26 +47,26 @@ const Login = () => {
   };
 
   return (
-    <div className='min-h-screen bg-gray-900 flex flex-col'>
+    <div className="min-h-screen bg-background text-primaryText flex flex-col">
       <Navbar />
       <div className="flex-1 flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div className="sm:w-full sm:max-w-md">
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-primaryText">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-400">
+          <p className="mt-2 text-center text-sm text-secondaryText">
             Don't have an account?{' '}
             <button
               onClick={handleNavigateToRegister}
-              className="font-medium text-blue-500 hover:text-blue-400"
+              className="font-medium text-linkColor hover:text-secondaryText"
             >
               Register
             </button>
           </p>
-          <div className="mt-8 bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <div className="mt-8 bg-secondaryBackground py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+                <label htmlFor="email" className="block text-sm font-medium text-secondaryText">
                   Email address
                 </label>
                 <div className="mt-1">
@@ -78,13 +78,13 @@ const Login = () => {
                     onChange={handleChange}
                     placeholder="Enter your email address"
                     required
-                    className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-700 bg-gray-900 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="appearance-none rounded-md block w-full px-3 py-2 border border-border bg-secondaryBackground text-primaryText placeholder-secondaryText focus:outline-none focus:ring-primaryAccent focus:border-primaryAccent sm:text-sm"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+                <label htmlFor="password" className="block text-sm font-medium text-secondaryText">
                   Password
                 </label>
                 <div className="mt-1">
@@ -96,14 +96,14 @@ const Login = () => {
                     onChange={handleChange}
                     placeholder="Enter your password"
                     required
-                    className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-700 bg-gray-900 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="appearance-none rounded-md block w-full px-3 py-2 border border-border bg-secondaryBackground text-primaryText placeholder-secondaryText focus:outline-none focus:ring-primaryAccent focus:border-primaryAccent sm:text-sm"
                   />
                 </div>
               </div>
               <div>
                 <button
                   type="submit"
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-buttonText bg-buttonBackground hover:bg-primaryAccent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primaryAccent"
                 >
                   Sign in
                 </button>

@@ -4,9 +4,22 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
     "./public/index.html"
   ],
+  darkMode: 'class', // Enable dark mode with a class (you can also use 'media' for system preference)
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        background: '#121212',
+        secondaryBackground: '#1F1F1F',
+        primaryText: '#E0E0E0',
+        secondaryText: '#B0B0B0',
+        primaryAccent: '#E1306C',
+        secondaryAccent: '#F7B731',
+        border: '#2C2C2C',
+        buttonBackground: '#E1306C',
+        buttonText: '#FFFFFF',
+        linkColor: '#E1306C',
+      },
+    },
   },
   plugins: [],
 }
-

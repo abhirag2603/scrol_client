@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userState } from '../states/atoms';
 import axios from 'axios';
 import Navbar from './Navbar';
-import PostCard from './Postcard';
+import PostCard from './PostCard';
 import CreatePostWidget from './CreatePostWidget';
-import { useNavigate } from 'react-router-dom';
-import FriendCard from './FriendCard'; // Import FriendCard
-const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
-const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
+import FriendCard from './FriendCard'; 
 
+const baseUrl = import.meta.env.MODE === 'production' 
+    ? import.meta.env.VITE_BASE_URL_RENDER 
+    : import.meta.env.VITE_BASE_URL_LOCAL;
 
 const Profile = () => {
   const { userId } = useParams();
   const [user, setUser] = useRecoilState(userState);
   const [profile, setProfile] = useState({});
   const [posts, setPosts] = useState([]);
-  const [friends, setFriends] = useState([]); // State to hold friends
+  const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isFriend, setIsFriend] = useState(false);
@@ -25,7 +25,7 @@ const Profile = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get(`${baseUrlLocal}/posts/${userId}/posts`, {
+      const response = await axios.get(`${baseUrl}/posts/${userId}/posts`, {
         withCredentials: true,
       });
       setPosts(response.data);
@@ -37,11 +37,11 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get(`${baseUrlLocal}/users/${userId}`, {
+      const response = await axios.get(`${baseUrl}/users/${userId}`, {
         withCredentials: true,
       });
       setProfile(response.data);
-      setFriends(response.data.friends || []); // Set friends state
+      setFriends(response.data.friends || []);
       setLoading(false);
       setIsFriend(user.friends.includes(userId));
     } catch (error) {
@@ -53,11 +53,11 @@ const Profile = () => {
 
   const handleFriendAction = async () => {
     try {
-      await axios.patch(`${baseUrlLocal}/users/${user._id}/${userId}`, {}, {
+      await axios.patch(`${baseUrl}/users/${user._id}/${userId}`, {}, {
         withCredentials: true,
       });
 
-      const response = await axios.get(`${baseUrlLocal}/users/${user._id}`, {
+      const response = await axios.get(`${baseUrl}/users/${user._id}`, {
         withCredentials: true,
       });
       const updatedUser = response.data;
@@ -91,38 +91,38 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex justify-center items-center">
-       <img src="/loading.gif" alt="Loading..." className="w-16 h-16" />
+      <div className="min-h-screen bg-background text-primaryText flex justify-center items-center">
+        <img src="/loading.gif" alt="Loading..." className="w-16 h-16" />
       </div>
     );
   }
 
   if (error) {
-    return <div className="min-h-screen bg-gray-900 text-white">{error}</div>;
+    return <div className="min-h-screen bg-background text-primaryText">{error}</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-background text-primaryText">
       <div className="sticky top-0 z-50">
         <Navbar />
       </div>
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-start md:items-center">
           <div className="md:w-1/4 flex justify-center mb-4 md:mb-0">
-          <img
-                    className="w-32 h-32 object-cover rounded-full border-4 border-blue-600"
-                    src={profile.avatar || "https://via.placeholder.com/150"}
-                    alt="avatar"
-                />
+            <img
+              className="w-32 h-32 object-cover rounded-full border-4 border-primaryAccent"
+              src={profile.avatar || "https://via.placeholder.com/150"}
+              alt="avatar"
+            />
           </div>
           <div className="md:w-3/4 md:pl-6 flex flex-col md:flex-row items-start md:items-center gap-48">
             <div className="flex-col gap-4">
               <h1 className="text-3xl font-semibold">{profile.firstName} {profile.lastName}</h1>
-              <p className="text-gray-400 mt-2">{profile.username}</p>
-              {user && user._id === profile._id && (<p className="text-gray-400 mt-2">{profile.email}</p>)}
+              <p className="text-secondaryText mt-2">{profile.username}</p>
+              {user && user._id === profile._id && (<p className="text-secondaryText mt-2">{profile.email}</p>)}
               {user && user._id === profile._id && (
                 <button
-                  className="mt-2 px-4 py-2 rounded bg-blue-600"
+                  className="mt-2 px-4 py-2 rounded bg-primaryAccent text-buttonText"
                   onClick={() => navigate(`/edit-profile`)}
                 >
                   Edit Profile
@@ -135,7 +135,7 @@ const Profile = () => {
               </div>
             ) : (
               <button
-                className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : 'bg-green-600'}`}
+                className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : 'bg-green-600'} text-buttonText`}
                 onClick={handleFriendAction}
               >
                 {isFriend ? 'Remove Friend' : 'Add Friend'}
@@ -164,7 +164,7 @@ const Profile = () => {
                 />
               ))
             ) : (
-              <p className="text-gray-400">No posts available.</p>
+              <p className="text-secondaryText">No posts available.</p>
             )}
           </div>
         </div>
@@ -179,7 +179,7 @@ const Profile = () => {
                 />
               ))
             ) : (
-              <p className="text-gray-400">No friends available.</p>
+              <p className="text-secondaryText">No friends available.</p>
             )}
           </div>
         </div>

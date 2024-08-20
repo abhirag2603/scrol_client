@@ -4,7 +4,9 @@ import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { userState } from '../states/atoms';
 
-const baseUrlLocal = import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrl = import.meta.env.MODE === 'production' 
+    ? import.meta.env.VITE_BASE_URL_RENDER 
+    : import.meta.env.VITE_BASE_URL_LOCAL;
 
 const PostCard = ({
   postId,
@@ -30,8 +32,9 @@ const PostCard = ({
 
   const handleLike = async () => {
     try {
+      setLiked(!liked);
       await axios.patch(
-        `${baseUrlLocal}/posts/${postId}/like`,
+        `${baseUrl}/posts/${postId}/like`,
         { userId: user._id },
         {
           withCredentials: true,
@@ -39,8 +42,7 @@ const PostCard = ({
             'Content-Type': 'application/json',
           },
         }
-      );
-      setLiked(!liked);
+      ); 
       onLike(); // Refresh posts after liking
     } catch (error) {
       console.error('Error liking post:', error);
@@ -52,7 +54,7 @@ const PostCard = ({
     if (confirmed) {
       try {
         await axios.delete(
-          `${baseUrlLocal}/posts/delete`,
+          `${baseUrl}/posts/delete`,
           {
             data: { postId: postId }, // `data` key should be used for the body in DELETE request
             withCredentials: true,
@@ -73,11 +75,11 @@ const PostCard = ({
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl mb-4 mx-auto max-w-md sm:max-w-sm md:max-w-lg">
+    <div className="bg-secondaryBackground text-primaryText rounded-lg shadow-lg overflow-hidden my-4 mx-auto max-w-md sm:max-w-sm md:max-w-lg">
       <div className="p-4 flex items-center space-x-4">
         {userPicturePath && (
           <img
-            className="w-8 h-8 rounded-full cursor-pointer"
+            className="w-8 h-8 rounded-full cursor-pointer border-2 border-primaryAccent"
             src={userPicturePath || 'https://via.placeholder.com/150'}
             alt={`${firstName} ${lastName}`}
             onClick={redirectToProfile}
@@ -85,7 +87,7 @@ const PostCard = ({
         )}
         <div className="flex justify-between w-full">
           <h2
-            className="text-white text-lg font-semibold cursor-pointer"
+            className="text-primaryText text-lg font-semibold cursor-pointer"
             onClick={redirectToProfile}
           >
             {firstName} {lastName} (@{username})
@@ -102,13 +104,13 @@ const PostCard = ({
       </div>
       {picture && (
         <img
-          className="w-full object-contain rounded-b-lg" // Remove fixed height and use object-contain
+          className="w-full object-contain rounded-b-lg" // Ensure image scales correctly
           src={picture}
           alt="Post"
         />
       )}
       <div className="p-4">
-        <p className="text-gray-300 mb-2 break-words">{description}</p>
+        <p className="text-primaryText mb-2 break-words">{description}</p>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1">
             <svg
@@ -126,7 +128,7 @@ const PostCard = ({
                 d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
               />
             </svg>
-            <span className="text-white">{likeCount}</span>
+            <span className="text-primaryText">{likeCount}</span>
           </div>
         </div>
       </div>

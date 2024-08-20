@@ -4,8 +4,9 @@ import { userState } from '../states/atoms';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
-const baseUrlLocal= import.meta.env.VITE_BASE_URL_LOCAL;
-const baseUrlRender=import.meta.env.VITE_BASE_URL_RENDER;
+
+const baseUrlLocal = import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrlRender = import.meta.env.VITE_BASE_URL_RENDER;
 
 const EditProfile = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -89,8 +90,8 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex justify-center items-center">
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded shadow-lg w-full max-w-md">
+    <div className="min-h-screen bg-background text-primaryText flex justify-center items-center">
+      <form onSubmit={handleSubmit} className="bg-secondaryBackground p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
 
         <div className="mb-4">
@@ -100,7 +101,7 @@ const EditProfile = () => {
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-700 text-white"
+            className="w-full p-2 rounded bg-secondaryBackground text-primaryText border border-border"
           />
         </div>
 
@@ -111,7 +112,7 @@ const EditProfile = () => {
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-700 text-white"
+            className="w-full p-2 rounded bg-secondaryBackground text-primaryText border border-border"
           />
         </div>
 
@@ -122,14 +123,15 @@ const EditProfile = () => {
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-700 text-white"
+            className="w-full p-2 rounded bg-secondaryBackground text-primaryText border border-border"
           />
         </div>
+
         <label className="block text-sm font-medium mb-1">Avatar</label>
         <div
           {...getRootProps()}
-          className={`mb-4 p-4 border-2 border-dashed border-gray-600 rounded cursor-pointer ${
-            isDragActive ? 'border-blue-500' : ''
+          className={`mb-4 p-4 border-2 border-dashed border-border rounded cursor-pointer ${
+            isDragActive ? 'border-primaryAccent' : ''
           }`}
         >
           <input {...getInputProps()} />
@@ -138,14 +140,14 @@ const EditProfile = () => {
               <img
                 src={preview}
                 alt="Preview"
-                className="w-full h-48 object-cover rounded"
+                className="w-full h-48 object-cover rounded border border-border"
               />
               <button
                 onClick={() => {
                   setAvatarFile(null);
                   setPreview('');
                 }}
-                className="absolute top-2 right-2 text-gray-300 hover:text-white"
+                className="absolute top-2 right-2 text-secondaryText hover:text-primaryText"
               >
                 X
               </button>
@@ -159,13 +161,13 @@ const EditProfile = () => {
 
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-blue-600 rounded hover:bg-blue-700 transition"
+          className="w-full py-2 px-4 bg-buttonBackground rounded text-buttonText hover:bg-primaryAccent transition"
           disabled={loading}
         >
           {loading ? (
             <div className="flex items-center justify-center">
               <svg
-                className="animate-spin h-5 w-5 mr-3 text-white"
+                className="animate-spin h-5 w-5 mr-3 text-buttonText"
                 viewBox="0 0 24 24"
               >
                 <path fill="none" d="M0 0h24v24H0z" />

@@ -4,7 +4,6 @@ import { userState } from '../states/atoms';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 
-// Use appropriate base URL based on the environment
 const baseUrl = import.meta.env.MODE === 'production' 
     ? import.meta.env.VITE_BASE_URL_RENDER 
     : import.meta.env.VITE_BASE_URL_LOCAL;
@@ -71,55 +70,53 @@ const CreatePostWidget = ({ onPostCreated }) => {
   };
 
   return (
-    <div className='max-w-sm bg-gray-800 text-white shadow-lg rounded-lg overflow-hidden my-4 p-4'>
-      <h2 className='text-xl font-semibold mb-4'>Create a Post</h2>
+    <div className="max-w-sm bg-secondaryBackground text-primaryText shadow-lg rounded-lg overflow-hidden my-4 p-4">
+      <h2 className="text-xl font-semibold mb-4">Create a Post</h2>
 
       <div 
         {...getRootProps()} 
-        className={`border-2 border-gray-700 bg-gray-900 text-white rounded p-4 mb-4 ${
-          isDragActive ? 'border-blue-500' : ''
+        className={`border-2 border-border bg-background text-primaryText rounded p-4 mb-4 ${
+          isDragActive ? 'border-primaryAccent' : ''
         }`}
       >
         <input {...getInputProps()} />
         {preview ? (
-          <div className='relative'>
+          <div className="relative">
             <img
               src={preview}
-              alt='Preview'
-              className='w-full h-48 object-cover rounded'
+              alt="Preview"
+              className="w-full h-48 object-cover rounded"
             />
             <button
               onClick={() => {
                 setFile(null);
                 setPreview('');
               }}
-              className='absolute top-2 right-2 text-gray-300 hover:text-white'
+              className="absolute top-2 right-2 text-primaryAccent hover:text-secondaryAccent"
             >
               X
             </button>
           </div>
         ) : (
-          isDragActive ? 
-            <p>Drop the file here...</p> :
-            <p>Drag 'n' drop a file here, or click to select one</p>
+          <p>{isDragActive ? 'Drop the file here...' : 'Drag \'n\' drop a file here, or click to select one'}</p>
         )}
       </div>
 
       <textarea
         value={description}
         onChange={handleDescriptionChange}
-        rows='4'
-        className='border border-gray-700 bg-gray-900 text-white rounded p-2 w-full mb-4'
-        placeholder='Write a description...'
+        rows="4"
+        className="border border-border bg-background text-primaryText rounded p-2 w-full mb-4"
+        placeholder="Write a description..."
       />
 
       <button
         onClick={handlePostCreation}
-        className='bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded'
+        className="bg-buttonBackground hover:bg-primaryAccent text-buttonText font-semibold px-4 py-2 rounded"
         disabled={loading}
       >
         {loading ? (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
               <path fill="none" d="M0 0h24v24H0z" />
               <path d="M12 4V2C6.48 2 2 6.48 2 12h2c0-4.41 3.59-8 8-8zm-4.16 2.32C8.03 5.2 9 6.6 9 8.14V12h3v-3.86C12 5.28 9.72 3 7 3c-.94 0-1.82.25-2.58.68L8.84 6.32zM12 13H9v-1.66C7.46 11.05 6 9.14 6 7V4h3v3c0 1.56 1.29 2.8 2.8 2.8V13z" />
