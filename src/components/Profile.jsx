@@ -4,9 +4,11 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../states/atoms';
 import axios from 'axios';
 import Navbar from './Navbar';
-import PostCard from './PostCard';
+import PostCard from './Postcard';
 import CreatePostWidget from './CreatePostWidget';
 import FriendCard from './FriendCard'; 
+import './scrollbar.css'; // Adjust the path as necessary
+
 
 const baseUrl = import.meta.env.MODE === 'production' 
     ? import.meta.env.VITE_BASE_URL_RENDER 
@@ -145,27 +147,30 @@ const Profile = () => {
         </div>
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Posts</h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {posts.length ? (
-              posts.map(post => (
-                <PostCard
-                  key={post._id}
-                  postId={post._id}
-                  username={post.username}
-                  userId={post.userId}
-                  firstName={post.firstName}
-                  lastName={post.lastName}
-                  description={post.description}
-                  picture={post.picture}
-                  userPicturePath={post.userPicturePath}
-                  likes={post.likes || []}
-                  onLike={handleLike}
-                  onDelete={handleDelete}
-                />
-              ))
-            ) : (
-              <p className="text-secondaryText">No posts available.</p>
-            )}
+          <div className="scrollbar-transparent">
+            <div className="flex gap-6">
+              {posts.length ? (
+                posts.map(post => (
+                  <div key={post._id} className="min-w-max">
+                    <PostCard
+                      postId={post._id}
+                      username={post.username}
+                      userId={post.userId}
+                      firstName={post.firstName}
+                      lastName={post.lastName}
+                      description={post.description}
+                      picture={post.picture}
+                      userPicturePath={post.userPicturePath}
+                      likes={post.likes || []}
+                      onLike={handleLike}
+                      onDelete={handleDelete}
+                    />
+                  </div>
+                ))
+              ) : (
+                <p className="text-secondaryText">No posts available.</p>
+              )}
+            </div>
           </div>
         </div>
         <div className="mt-8">
