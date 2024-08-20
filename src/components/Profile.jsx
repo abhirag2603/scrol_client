@@ -124,7 +124,7 @@ const Profile = () => {
               {user && user._id === profile._id && (<p className="text-secondaryText mt-2">{profile.email}</p>)}
               {user && user._id === profile._id && (
                 <button
-                  className="mt-2 px-4 py-2 rounded bg-primaryAccent text-buttonText"
+                  className="mt-2 px-4 py-2 rounded bg-primaryAccent hover:bg-secondaryAccent text-buttonText"
                   onClick={() => navigate(`/edit-profile`)}
                 >
                   Edit Profile

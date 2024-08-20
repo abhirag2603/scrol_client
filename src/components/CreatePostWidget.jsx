@@ -112,7 +112,7 @@ const CreatePostWidget = ({ onPostCreated }) => {
 
       <button
         onClick={handlePostCreation}
-        className="bg-buttonBackground hover:bg-primaryAccent text-buttonText font-semibold px-4 py-2 rounded"
+        className="bg-buttonBackground hover:bg-secondaryAccent text-buttonText font-semibold px-4 py-2 rounded"
         disabled={loading}
       >
         {loading ? (
