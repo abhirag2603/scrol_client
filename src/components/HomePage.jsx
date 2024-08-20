@@ -10,7 +10,7 @@ import CreatePostWidget from './CreatePostWidget';
 const baseUrlLocal = import.meta.env.VITE_BASE_URL_LOCAL;
 const baseUrlRender = import.meta.env.VITE_BASE_URL_RENDER;
 
-const HomePage = () => {
+const HomePage = () => { 
   const [user] = useRecoilState(userState);
   const navigate = useNavigate();
   const feedPostRef = useRef(null);

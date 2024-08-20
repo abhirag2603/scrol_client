@@ -16,7 +16,7 @@ const baseUrl = import.meta.env.MODE === 'production'
 
 const Profile = () => {
   const { userId } = useParams();
-  const [user, setUser] = useRecoilState(userState);
+  const [user, setUser] = useRecoilState(userState); 
   const [profile, setProfile] = useState({});
   const [posts, setPosts] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -29,6 +29,9 @@ const Profile = () => {
     try {
       const response = await axios.get(`${baseUrl}/posts/${userId}/posts`, {
         withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       setPosts(response.data);
     } catch (error) {

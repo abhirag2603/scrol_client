@@ -26,7 +26,7 @@ const FeedPost = forwardRef((props, ref) => {
       setLoading(false);
     }
   };
-
+ 
   useEffect(() => {
     fetchPosts();
   }, []);
