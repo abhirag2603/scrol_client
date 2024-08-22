@@ -4,6 +4,7 @@ import { userState } from '../states/atoms';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
+import Navbar from './Navbar'
 
 const baseUrlLocal = import.meta.env.VITE_BASE_URL_LOCAL;
 const baseUrlRender = import.meta.env.VITE_BASE_URL_RENDER;
@@ -90,6 +91,8 @@ const EditProfile = () => {
   };
 
   return (
+    <div>
+      <Navbar/>
     <div className="min-h-screen bg-background text-primaryText flex justify-center items-center">
       <form onSubmit={handleSubmit} className="bg-secondaryBackground p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
@@ -161,7 +164,7 @@ const EditProfile = () => {
 
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-buttonBackground rounded text-buttonText hover:bg-primaryAccent transition"
+          className="w-full py-2 px-4 bg-buttonBackground hover:bg-secondaryAccent rounded text-buttonText transition"
           disabled={loading}
         >
           {loading ? (
@@ -183,6 +186,7 @@ const EditProfile = () => {
           )}
         </button>
       </form>
+    </div>
     </div>
   );
 };
