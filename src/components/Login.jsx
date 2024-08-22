@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { loginState, userState } from '../states/atoms';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ const baseUrlRender = import.meta.env.VITE_BASE_URL_RENDER;
 const Login = () => {
   const [formData, setFormData] = useRecoilState(loginState);
   const [user, setUser] = useRecoilState(userState);
+  const [errorMessage, setErrorMessage] = useState(null); // New state for error messages
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -38,7 +39,12 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       navigate('/', { replace: true });
     } catch (error) {
-      console.error('Error during login:', error);
+      // Capture and display error messages from the backend
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessage(error.response.data.error);
+      } else {
+        setErrorMessage('An unexpected error occurred. Please try again later.');
+      }
     }
   };
 
@@ -65,6 +71,11 @@ const Login = () => {
           </p>
           <div className="mt-8 bg-secondaryBackground py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit}>
+              {errorMessage && (
+                <div className="text-red-500 text-sm mb-4">
+                  {errorMessage}
+                </div>
+              )}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-secondaryText">
                   Email address

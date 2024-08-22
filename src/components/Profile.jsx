@@ -54,7 +54,6 @@ const Profile = () => {
       setLoading(false);
       setIsFriend(user.friends.includes(userId));
       setHasSentRequest(fetchedProfile.friendRequests.includes(user._id));
-      console.log(fetchedProfile)
     } catch (error) {
       console.error('Error fetching profile:', error);
       setError('Error fetching profile');
@@ -62,15 +61,12 @@ const Profile = () => {
     }
   };
 
-  
   const handleButtonClick = () => {
     if (isFriend) {
-      // Call removeFriend function if the person is already a friend
       removeFriend();
     } else if (hasSentRequest) {
-
+      // Handle case where request is pending (optional)
     } else {
-      // Call handleSendRequest if the person is not a friend and no request has been sent
       handleSendRequest();
     }
   };
@@ -86,22 +82,6 @@ const Profile = () => {
     }
   };
 
-  const handleAcceptRequest = async () => {
-    try {
-      fetchProfile();
-    } catch (error) {
-      console.error('Error accepting friend request:', error);
-    }
-  };
-
-  const handleRejectRequest = async () => {
-    try {
-      fetchProfile();
-    } catch (error) {
-      console.error('Error rejecting friend request:', error);
-    }
-  };
-
   const removeFriend = async () => {
     try {
       await axios.delete(`${baseUrl}/users/${user._id}/friends/${userId}`, {
@@ -113,25 +93,27 @@ const Profile = () => {
     }
   };
 
-  const hasValidRequests = friendRequests.every(request => request !== null);
+  const handleAcceptRequest = async () => {
+      fetchProfile();
+
+  };
+
+  const handleRejectRequest = async () => {
+      fetchProfile();
+  };
+
+  const handleLike=()=>{
+    fetchPosts();
+  }
+
+  const handleDelete=()=>{
+    fetchPosts();
+  }
 
   useEffect(() => {
     fetchProfile();
     fetchPosts();
   }, [userId]);
-
-  const handleLike = () => {
-    fetchPosts();
-  };
-
-  const handleDelete = () => {
-    fetchPosts();
-  };
-
-  const handlePostCreated = () => {
-    fetchPosts();
-  };
-
 
   if (loading) {
     return (
@@ -177,7 +159,7 @@ const Profile = () => {
               <button
                 className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : hasSentRequest ? 'bg-yellow-500' : 'bg-green-600'} text-buttonText`}
                 onClick={handleButtonClick}
-                disabled={hasSentRequest}
+                disabled={hasSentRequest && !isFriend} // Disable button if request is pending and already friends
               >
                 {isFriend ? 'Remove Friend' : hasSentRequest ? 'Pending' : 'Add Friend'}
               </button>
@@ -229,7 +211,7 @@ const Profile = () => {
           </div>
         </div>
         {profile._id === user._id ? (
-  friendRequests.length>1 ? (
+  friendRequests.length > 1 ? (
     <div className="mt-8">
       <h2 className="text-2xl font-semibold mb-4">Friend Requests</h2>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -248,13 +230,10 @@ const Profile = () => {
   ) : (
     <div className="mt-8">
       <h2 className="text-2xl font-semibold mb-4">Friend Requests</h2>
-      <p className="text-secondaryText">No friend requests found.</p>
+      <p className="text-secondaryText">No friend requests.</p>
     </div>
   )
-) : (
-  <div>
-  </div>
-)}
+) : null}
       </div>
     </div>
   );
