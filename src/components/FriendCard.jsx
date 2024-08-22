@@ -14,6 +14,7 @@ const FriendCard = ({ friendId }) => {
 
   const fetchProfile = async () => {
     try {
+      
       const response = await axios.get(`${baseUrl}/users/${friendId}`, {
         withCredentials: true,
       });

@@ -6,9 +6,9 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import PostCard from './Postcard';
 import CreatePostWidget from './CreatePostWidget';
-import FriendCard from './FriendCard'; 
+import FriendCard from './FriendCard';
+import FriendRequestCard from './FriendRequestCard';
 import './scrollbar.css'; // Adjust the path as necessary
-
 
 const baseUrl = import.meta.env.MODE === 'production' 
     ? import.meta.env.VITE_BASE_URL_RENDER 
@@ -20,9 +20,11 @@ const Profile = () => {
   const [profile, setProfile] = useState({});
   const [posts, setPosts] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isFriend, setIsFriend] = useState(false);
+  const [hasSentRequest, setHasSentRequest] = useState(false);
   const navigate = useNavigate();
 
   const fetchPosts = async () => {
@@ -45,10 +47,14 @@ const Profile = () => {
       const response = await axios.get(`${baseUrl}/users/${userId}`, {
         withCredentials: true,
       });
-      setProfile(response.data);
-      setFriends(response.data.friends || []);
+      const fetchedProfile = response.data;
+      setProfile(fetchedProfile);
+      setFriends(fetchedProfile.friends || []);
+      setFriendRequests(fetchedProfile.friendRequests || []);
       setLoading(false);
       setIsFriend(user.friends.includes(userId));
+      setHasSentRequest(fetchedProfile.friendRequests.includes(user._id));
+      console.log(fetchedProfile)
     } catch (error) {
       console.error('Error fetching profile:', error);
       setError('Error fetching profile');
@@ -56,26 +62,58 @@ const Profile = () => {
     }
   };
 
-  const handleFriendAction = async () => {
-    try {
-      await axios.patch(`${baseUrl}/users/${user._id}/${userId}`, {}, {
-        withCredentials: true,
-      });
+  
+  const handleButtonClick = () => {
+    if (isFriend) {
+      // Call removeFriend function if the person is already a friend
+      removeFriend();
+    } else if (hasSentRequest) {
 
-      const response = await axios.get(`${baseUrl}/users/${user._id}`, {
-        withCredentials: true,
-      });
-      const updatedUser = response.data;
-
-      setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-
-      setIsFriend(updatedUser.friends.includes(userId));
-
-    } catch (error) {
-      console.error('Error updating friend status:', error);
+    } else {
+      // Call handleSendRequest if the person is not a friend and no request has been sent
+      handleSendRequest();
     }
   };
+
+  const handleSendRequest = async () => {
+    try {
+      await axios.post(`${baseUrl}/users/sendRequest/${userId}`, {}, {
+        withCredentials: true,
+      });
+      setHasSentRequest(true);
+    } catch (error) {
+      console.error('Error sending friend request:', error);
+    }
+  };
+
+  const handleAcceptRequest = async () => {
+    try {
+      fetchProfile();
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
+    }
+  };
+
+  const handleRejectRequest = async () => {
+    try {
+      fetchProfile();
+    } catch (error) {
+      console.error('Error rejecting friend request:', error);
+    }
+  };
+
+  const removeFriend = async () => {
+    try {
+      await axios.delete(`${baseUrl}/users/${user._id}/friends/${userId}`, {
+        withCredentials: true,
+      });
+      fetchProfile(); // Refresh the profile data after removal
+    } catch (error) {
+      console.error('Error removing friend:', error);
+    }
+  };
+
+  const hasValidRequests = friendRequests.every(request => request !== null);
 
   useEffect(() => {
     fetchProfile();
@@ -93,6 +131,7 @@ const Profile = () => {
   const handlePostCreated = () => {
     fetchPosts();
   };
+
 
   if (loading) {
     return (
@@ -134,16 +173,13 @@ const Profile = () => {
                 </button>
               )}
             </div>
-            {user && user._id === profile._id ? (
-              <div className="mt-4 md:mt-0 ml-4">
-                <CreatePostWidget onPostCreated={handlePostCreated} />
-              </div>
-            ) : (
+            {user && user._id !== profile._id && (
               <button
-                className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : 'bg-green-600'} text-buttonText`}
-                onClick={handleFriendAction}
+                className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : hasSentRequest ? 'bg-yellow-500' : 'bg-green-600'} text-buttonText`}
+                onClick={handleButtonClick}
+                disabled={hasSentRequest}
               >
-                {isFriend ? 'Remove Friend' : 'Add Friend'}
+                {isFriend ? 'Remove Friend' : hasSentRequest ? 'Pending' : 'Add Friend'}
               </button>
             )}
           </div>
@@ -167,6 +203,7 @@ const Profile = () => {
                       likes={post.likes || []}
                       onLike={handleLike}
                       onDelete={handleDelete}
+                      key={post._id}
                     />
                   </div>
                 ))
@@ -182,7 +219,7 @@ const Profile = () => {
             {friends.length ? (
               friends.map(friend => (
                 <FriendCard
-                  key={friend._id}
+                  key={friend}
                   friendId={friend}
                 />
               ))
@@ -191,6 +228,33 @@ const Profile = () => {
             )}
           </div>
         </div>
+        {profile._id === user._id ? (
+  friendRequests.length>1 ? (
+    <div className="mt-8">
+      <h2 className="text-2xl font-semibold mb-4">Friend Requests</h2>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {friendRequests.map(requestId => (
+          requestId && (
+            <FriendRequestCard
+              key={requestId}
+              requestId={requestId}
+              onAccept={handleAcceptRequest}
+              onReject={handleRejectRequest}
+            />
+          )
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div className="mt-8">
+      <h2 className="text-2xl font-semibold mb-4">Friend Requests</h2>
+      <p className="text-secondaryText">No friend requests found.</p>
+    </div>
+  )
+) : (
+  <div>
+  </div>
+)}
       </div>
     </div>
   );
