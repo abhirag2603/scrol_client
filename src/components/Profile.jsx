@@ -86,7 +86,6 @@ const Profile = () => {
       console.error('Error updating user state:', error);
     }
   };
-  
 
   const handleSendRequest = async () => {
     try {
@@ -105,28 +104,27 @@ const Profile = () => {
         withCredentials: true,
       });
       await updateUserState(); 
-      fetchProfile();// Refresh the profile data after removal
+      fetchProfile(); // Refresh the profile data after removal
     } catch (error) {
       console.error('Error removing friend:', error);
     }
   };
 
   const handleAcceptRequest = async () => {
-      fetchProfile();
-
+    fetchProfile();
   };
 
   const handleRejectRequest = async () => {
-      fetchProfile();
+    fetchProfile();
   };
 
-  const handleLike=()=>{
+  const handleLike = () => {
     fetchPosts();
-  }
+  };
 
-  const handleDelete=()=>{
+  const handleDelete = () => {
     fetchPosts();
-  }
+  };
 
   useEffect(() => {
     fetchProfile();
@@ -151,17 +149,15 @@ const Profile = () => {
         <Navbar />
       </div>
       <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row items-start md:items-center">
-          <div className="md:w-1/4 flex justify-center mb-4 md:mb-0">
+        <div className="flex flex-col md:flex-row lg:flex-row items-center lg:justify-between justify-between md:justify-between">
+          <div className="md:w-1/4 flex lg:flex-row md:flex-row gap-6 items-center mb-4 md:mb-0">
             <img
-              className="w-32 h-32 object-cover rounded-full border-4 border-primaryAccent"
+              className="w-32 h-32 scale-75 md:scale-90 object-cover rounded-full border-4 border-primaryAccent"
               src={profile.avatar || "https://via.placeholder.com/150"}
               alt="avatar"
             />
-          </div>
-          <div className="md:w-3/4 md:pl-6 flex flex-col md:flex-row items-start md:items-center gap-48">
-            <div className="flex-col gap-4">
-              <h1 className="text-3xl font-semibold">{profile.firstName} {profile.lastName}</h1>
+            <div className="">
+              <h1 className="lg:text-2xl text-xl md:text-2xl font-semibold">{profile.firstName} {profile.lastName}</h1>
               <p className="text-secondaryText mt-2">{profile.username}</p>
               {user && user._id === profile._id && (<p className="text-secondaryText mt-2">{profile.email}</p>)}
               {user && user._id === profile._id && (
@@ -173,16 +169,21 @@ const Profile = () => {
                 </button>
               )}
             </div>
-            {user && user._id !== profile._id && (
-              <button
-                className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : hasSentRequest ? 'bg-yellow-500' : 'bg-green-600'} text-buttonText`}
-                onClick={handleButtonClick}
-                disabled={hasSentRequest && !isFriend} // Disable button if request is pending and already friends
-              >
-                {isFriend ? 'Remove Friend' : hasSentRequest ? 'Pending' : 'Add Friend'}
-              </button>
-            )}
           </div>
+          {user && user._id === profile._id && (
+            <div className='lg:w-1/4 md:scale-90 scale-90'>
+              <CreatePostWidget />
+            </div>
+          )}
+          {user && user._id !== profile._id && (
+            <button
+              className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : hasSentRequest ? 'bg-yellow-500' : 'bg-green-600'} text-buttonText`}
+              onClick={handleButtonClick}
+              disabled={hasSentRequest && !isFriend} // Disable button if request is pending and already friends
+            >
+              {isFriend ? 'Remove Friend' : hasSentRequest ? 'Pending' : 'Add Friend'}
+            </button>
+          )}
         </div>
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Posts</h2>
@@ -218,11 +219,10 @@ const Profile = () => {
           <div className="flex gap-6 scrollbar-transparent">
             {friends.length ? (
               friends.map(friend => (
-                <div className='min-w-max'>
-                <FriendCard
-                  key={friend}
-                  friendId={friend}
-                />
+                <div className='min-w-max' key={friend}>
+                  <FriendCard
+                    friendId={friend}
+                  />
                 </div>
               ))
             ) : (
@@ -231,31 +231,26 @@ const Profile = () => {
           </div>
         </div>
         {profile._id === user._id ? (
-  friendRequests.length > 1 ? (
-    <div className="mt-8">
-      <h2 className="text-2xl font-semibold mb-4">Friend Requests</h2>
-      <div className="flex gap-6 scrollbar-transparent">
-        {friendRequests.map(requestId => (
-          requestId && (
-            <div className='min-w-max'>
-            <FriendRequestCard
-              key={requestId}
-              requestId={requestId}
-              onAccept={handleAcceptRequest}
-              onReject={handleRejectRequest}
-            />
+          friendRequests.length > 0 ? (
+            <div className="mt-8">
+              <h2 className="text-2xl font-semibold mb-4">Friend Requests</h2>
+              <div className="flex gap-6 scrollbar-transparent">
+                {friendRequests.map(requestId => (
+                  requestId && (
+                    <div className='min-w-max'>
+                    <FriendRequestCard
+                      key={requestId}
+                      requestId={requestId}
+                      onAccept={handleAcceptRequest}
+                      onReject={handleRejectRequest}
+                    />
+                      </div>
+                  )
+                ))}
+              </div>
             </div>
-          )
-        ))}
-      </div>
-    </div>
-  ) : (
-    <div className="mt-8">
-      <h2 className="text-2xl font-semibold mb-4">Friend Requests</h2>
-      <p className="text-secondaryText">No friend requests.</p>
-    </div>
-  )
-) : null}
+          ) : null
+        ) : null}
       </div>
     </div>
   );

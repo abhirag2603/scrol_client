@@ -70,7 +70,7 @@ const CreatePostWidget = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="max-w-sm bg-secondaryBackground text-primaryText shadow-lg rounded-lg overflow-hidden my-4 p-4">
+    <div className="bg-secondaryBackground text-primaryText shadow-lg rounded-lg overflow-hidden p-4">
       <h2 className="text-xl font-semibold mb-4">Create a Post</h2>
 
       <div 
