@@ -168,8 +168,8 @@ const Profile = () => {
         </div>
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Posts</h2>
-          <div className="scrollbar-transparent">
-            <div className="flex gap-6">
+          <div className="">
+            <div className="flex gap-6 scrollbar-transparent">
               {posts.length ? (
                 posts.map(post => (
                   <div key={post._id} className="min-w-max">
@@ -197,13 +197,15 @@ const Profile = () => {
         </div>
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Friends</h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="flex gap-6 scrollbar-transparent">
             {friends.length ? (
               friends.map(friend => (
+                <div className='min-w-max'>
                 <FriendCard
                   key={friend}
                   friendId={friend}
                 />
+                </div>
               ))
             ) : (
               <p className="text-secondaryText">No friends available.</p>
@@ -214,15 +216,17 @@ const Profile = () => {
   friendRequests.length > 1 ? (
     <div className="mt-8">
       <h2 className="text-2xl font-semibold mb-4">Friend Requests</h2>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="flex gap-6 scrollbar-transparent">
         {friendRequests.map(requestId => (
           requestId && (
+            <div className='min-w-max'>
             <FriendRequestCard
               key={requestId}
               requestId={requestId}
               onAccept={handleAcceptRequest}
               onReject={handleRejectRequest}
             />
+            </div>
           )
         ))}
       </div>
