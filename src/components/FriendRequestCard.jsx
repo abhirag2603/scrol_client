@@ -38,6 +38,7 @@ const FriendRequestCard = ({ requestId, onAccept, onReject }) => {
       await axios.patch(`${baseUrl}/users/acceptRequest/${requestId}/${user._id}`, {}, {
         withCredentials: true,
       });
+      await updateUserState();
       onAccept();
     } catch (error) {
       console.error('Error accepting request:', error);
@@ -49,11 +50,25 @@ const FriendRequestCard = ({ requestId, onAccept, onReject }) => {
       await axios.patch(`${baseUrl}/users/rejectRequest/${requestId}/${user._id}`, {}, {
         withCredentials: true,
       });
+      await updateUserState();
       onReject();
     } catch (error) {
       console.error('Error declining request:', error);
     }
   };
+
+  const updateUserState = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/users/${user._id}`, {
+        withCredentials: true,
+      });
+      setUser(response.data);
+      localStorage.setItem('user', JSON.stringify(response.data));
+    } catch (error) {
+      console.error('Error fetching updated user data:', error);
+    }
+  };
+
 
   useEffect(() => {
     fetchRequestUser();

@@ -52,7 +52,9 @@ const Profile = () => {
       setFriends(fetchedProfile.friends || []);
       setFriendRequests(fetchedProfile.friendRequests || []);
       setLoading(false);
-      setIsFriend(user.friends.includes(userId));
+      if (user._id !== fetchedProfile._id) {
+        setIsFriend(fetchedProfile.friends.includes(user._id));
+      }
       setHasSentRequest(fetchedProfile.friendRequests.includes(user._id));
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -71,6 +73,21 @@ const Profile = () => {
     }
   };
 
+  const updateUserState = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/users/${user._id}`, {
+        withCredentials: true,
+      });
+      const updatedUser = response.data;
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      fetchProfile();
+    } catch (error) {
+      console.error('Error updating user state:', error);
+    }
+  };
+  
+
   const handleSendRequest = async () => {
     try {
       await axios.post(`${baseUrl}/users/sendRequest/${userId}`, {}, {
@@ -87,7 +104,8 @@ const Profile = () => {
       await axios.delete(`${baseUrl}/users/${user._id}/friends/${userId}`, {
         withCredentials: true,
       });
-      fetchProfile(); // Refresh the profile data after removal
+      await updateUserState(); 
+      fetchProfile();// Refresh the profile data after removal
     } catch (error) {
       console.error('Error removing friend:', error);
     }
