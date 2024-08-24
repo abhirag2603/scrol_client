@@ -83,7 +83,7 @@ const FriendRequestCard = ({ requestId, onAccept, onReject }) => {
   }
 
   return (
-    <div className="bg-secondaryBackground text-primaryText w-full flex items-center p-4 rounded-xl shadow border cursor-pointer hover:shadow-lg transition-shadow">
+    <div className="bg-secondaryBackground text-primaryText min-w-[20rem] flex items-center p-4 rounded-xl shadow border cursor-pointer hover:shadow-lg transition-shadow">
       <div className="flex items-center space-x-4">
         <img 
           src={requestUser.avatar || 'https://via.placeholder.com/64'} 

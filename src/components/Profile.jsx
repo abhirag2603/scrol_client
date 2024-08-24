@@ -216,7 +216,7 @@ const Profile = () => {
         </div>
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Friends</h2>
-          <div className="flex gap-6 scrollbar-transparent">
+          <div className="flex flex-row gap-6 scrollbar-transparent">
             {friends.length ? (
               friends.map(friend => (
                 <div className='min-w-max' key={friend}>

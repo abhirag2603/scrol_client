@@ -45,7 +45,7 @@ const FriendCard = ({ friendId }) => {
 
   return (
     <div 
-      className="bg-secondaryBackground text-primaryText w-full flex items-center p-4 rounded-xl shadow border cursor-pointer hover:shadow-lg transition-shadow"
+      className="bg-secondaryBackground text-primaryText min-w-[20rem] flex items-center p-4 rounded-xl shadow border cursor-pointer hover:shadow-lg transition-shadow"
       onClick={handleProfileClick}
     >
       <div className="flex items-center space-x-4">
