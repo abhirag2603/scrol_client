@@ -67,7 +67,7 @@ const Navbar = () => {
               name="q" 
               value={searchQuery} // Bind input to state
               onChange={(e) => setSearchQuery(e.target.value)} // Update state on change
-              className='py-2 text-sm text-white bg-gray-900 rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900 w-full'
+              className='py-2 text-sm rounded-md pl-10 focus:outline-none bg-white text-gray-900 w-full'
               placeholder="Search..." 
               autoComplete="off" 
             />
