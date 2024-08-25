@@ -11,7 +11,7 @@ const baseUrlLocal = import.meta.env.VITE_BASE_URL_LOCAL;
 const baseUrlRender = import.meta.env.VITE_BASE_URL_RENDER;
 
 const HomePage = () => { 
-  const [user] = useRecoilState(userState);
+  const [user,setUser] = useRecoilState(userState);
   const navigate = useNavigate();
   const feedPostRef = useRef(null);
 
@@ -31,7 +31,9 @@ const HomePage = () => {
       <div className="flex flex-col lg:flex-row justify-center lg:justify-between mt-16 lg:space-x-8 px-4 lg:px-8">
         
         <div className="lg:w-1/4 lg:h-1/4">
-          <UserCard />
+          <UserCard
+          cardUser={user}
+          />
         </div>
 
         <div className="lg:w-1/2">

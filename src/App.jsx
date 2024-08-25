@@ -12,6 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
 import { loadFromLocalStorage } from './utils/storage';
 import EditProfile from './components/EditProfle';
+import SearchResult from './components/SearchResult';
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -32,6 +33,7 @@ const App = () => {
           <Route path='/' element={<ProtectedRoute element={<HomePage />} />} />
           <Route path='/profile/:userId' element={<ProtectedRoute element={<Profile />} />} />
           <Route path='/edit-profile' element={<ProtectedRoute element={<EditProfile />} />} />
+          <Route path='/search/:username' element={<ProtectedRoute element={<SearchResult />} />} />
         </Routes>
       </BrowserRouter>
     </div>

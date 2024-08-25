@@ -11,7 +11,8 @@ const baseUrl = import.meta.env.MODE === 'production'
 const Navbar = () => {
   const [user, setUser] = useRecoilState(userState);
   const navigate = useNavigate();
-  const [showDropdown, setShowDropdown] = useState(false); // State for dropdown
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(''); // Added state for search query
 
   const handleLogout = async () => {
     try {
@@ -30,7 +31,14 @@ const Navbar = () => {
   };
 
   const toggleDropdown = () => {
-    setShowDropdown(!showDropdown); // Toggle dropdown visibility
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search/${searchQuery}`); // Redirect to /search with query
+    }
   };
 
   return (
@@ -39,16 +47,43 @@ const Navbar = () => {
         <img className='w-8' src='/ScrolLogo2.png' alt='Scrol Logo'/>
         <h1 className='text-primaryText font-semibold ml-2'>SCROL</h1>
       </div>
+
+      {user && (
+        <div className='flex-grow flex justify-center items-center'>
+          <form 
+            method="GET" 
+            className='relative text-gray-600 focus-within:text-gray-400 w-1/2'
+            onSubmit={handleSearchSubmit} // Updated to handle form submission
+          >
+            <span className='absolute inset-y-0 left-0 flex items-center pl-2'>
+              <button type="submit" className='p-1 focus:outline-none focus:shadow-outline'>
+                <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" className='w-6 h-6'>
+                  <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </button>
+            </span>
+            <input 
+              type="search" 
+              name="q" 
+              value={searchQuery} // Bind input to state
+              onChange={(e) => setSearchQuery(e.target.value)} // Update state on change
+              className='py-2 text-sm text-white bg-gray-900 rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900 w-full'
+              placeholder="Search..." 
+              autoComplete="off" 
+            />
+          </form>
+        </div>
+      )}
+
       {user && (
         <div className='flex items-center space-x-4 relative'>
-          {/* Menu button for medium and small screens */}
           <button
             onClick={toggleDropdown}
             className='lg:hidden bg-primaryAccent hover:bg-secondaryAccent text-buttonText font-semibold px-4 py-2 rounded'
           >
             Menu
           </button>
-          {/* Dropdown menu for medium and small screens */}
+
           <ul className={`${showDropdown ? 'absolute top-12 right-0 flex flex-col items-center bg-secondaryBackground border border-gray-100 rounded shadow-lg z-10' : 'hidden'}`}>
             <li 
               className="text-primaryText font-semibold py-2 px-4 hover:bg-primaryAccent cursor-pointer w-full text-center"
@@ -69,7 +104,7 @@ const Navbar = () => {
               Logout
             </li>
           </ul>
-          {/* Inline menu for large screens */}
+
           <div className='hidden lg:flex lg:items-center lg:space-x-4'>
             <button
               onClick={() => navigate('/')}
