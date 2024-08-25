@@ -55,7 +55,7 @@ function SearchResult() {
             ))}
           </div>
         ) : (
-          <p>No users found</p>
+          <></>
         )}
       </div>
     </div>
