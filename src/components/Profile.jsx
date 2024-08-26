@@ -130,21 +130,20 @@ const Profile = () => {
     fetchProfile();
     fetchPosts();
   }, [userId]);
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-background text-primaryText flex justify-center items-center">
+      <div className="min-h-screen bg-background dark:bg-dark-background text-primaryText dark:textdark-primaryText flex justify-center items-center">
         <img src="/loading.gif" alt="Loading..." className="w-16 h-16" />
       </div>
     );
   }
 
   if (error) {
-    return <div className="min-h-screen bg-background text-primaryText">{error}</div>;
+    return <div className="min-h-screen bg-background dark:bg-dark-secondaryBackground text-primaryText dark:text-secondaryText">{error}</div>;
   }
 
   return (
-    <div className="min-h-screen bg-background text-primaryText">
+    <div className="min-h-screen  bg-background dark:bg-dark-background text-primaryText dark:text-dark-primaryText">
       <div className="sticky top-0 z-50">
         <Navbar />
       </div>
@@ -158,8 +157,8 @@ const Profile = () => {
             />
             <div className="">
               <h1 className="lg:text-2xl text-xl md:text-2xl font-semibold">{profile.firstName} {profile.lastName}</h1>
-              <p className="text-secondaryText mt-2">{profile.username}</p>
-              {user && user._id === profile._id && (<p className="text-secondaryText mt-2">{profile.email}</p>)}
+              <p className="text-secondaryText dark:text-dark-secondaryText mt-2">{profile.username}</p>
+              {user && user._id === profile._id && (<p className="text-secondaryText dark:text-dark-secondaryText mt-2">{profile.email}</p>)}
               {user && user._id === profile._id && (
                 <button
                   className="mt-2 px-4 py-2 rounded bg-primaryAccent hover:bg-secondaryAccent text-buttonText"
@@ -179,7 +178,7 @@ const Profile = () => {
             <button
               className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : hasSentRequest ? 'bg-yellow-500' : 'bg-green-600'} text-buttonText`}
               onClick={handleButtonClick}
-              disabled={hasSentRequest && !isFriend} // Disable button if request is pending and already friends
+              disabled={hasSentRequest && !isFriend}
             >
               {isFriend ? 'Remove Friend' : hasSentRequest ? 'Pending' : 'Add Friend'}
             </button>
@@ -209,7 +208,7 @@ const Profile = () => {
                   </div>
                 ))
               ) : (
-                <p className="text-secondaryText">No posts available.</p>
+                <p className="text-secondaryText dark:text-primaryText">No posts available.</p>
               )}
             </div>
           </div>
@@ -226,7 +225,7 @@ const Profile = () => {
                 </div>
               ))
             ) : (
-              <p className="text-secondaryText">No friends available.</p>
+              <p className="text-secondaryText dark:text-primaryText">No friends available.</p>
             )}
           </div>
         </div>

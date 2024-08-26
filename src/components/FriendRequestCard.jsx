@@ -75,15 +75,15 @@ const FriendRequestCard = ({ requestId, onAccept, onReject }) => {
   }, [requestId]);
 
   if (loading) {
-    return <div className="bg-secondaryBackground text-primaryText w-full flex items-center p-4 rounded-xl shadow border">Loading...</div>;
+    return <div className="bg-secondaryBackground dark:bg-dark-secondaryBackground text-primaryText w-full flex items-center p-4 rounded-xl shadow border">Loading...</div>;
   }
 
   if (error) {
-    return <div className="bg-secondaryBackground text-primaryText w-full flex items-center p-4 rounded-xl shadow border">Error: {error}</div>;
+    return <div className="bg-secondaryBackground dark:bg-dark-secondaryBackground text-primaryText w-full flex items-center p-4 rounded-xl shadow border">Error: {error}</div>;
   }
 
   return (
-    <div className="bg-secondaryBackground text-primaryText min-w-[20rem] flex items-center p-4 rounded-xl shadow border cursor-pointer hover:shadow-lg transition-shadow">
+    <div className="bg-secondaryBackground dark:bg-dark-secondaryBackground text-primaryText min-w-[20rem] flex items-center p-4 rounded-xl shadow border cursor-pointer hover:shadow-lg transition-shadow">
       <div className="flex items-center space-x-4">
         <img 
           src={requestUser.avatar || 'https://via.placeholder.com/64'} 
@@ -93,10 +93,10 @@ const FriendRequestCard = ({ requestId, onAccept, onReject }) => {
         />
       </div>
       <div className="flex-grow p-3" onClick={handleProfileClick}>
-        <div className="font-semibold">
+        <div className="font-semibold text-primaryText dark:text-dark-primaryText">
           {requestUser.firstName} {requestUser.lastName}
         </div>
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-secondaryText dark:text-dark-secondaryText">
           @{requestUser.username}
         </div>
       </div>

@@ -88,7 +88,7 @@ const FeedPost = forwardRef((props, ref) => {
                 ))}
                 {page < totalPages && (
                     <div className="flex justify-center mt-4">
-                        <button onClick={loadMorePosts} className="btn btn-primary">
+                        <button onClick={loadMorePosts} className=" text-primaryText dark:text-dark-primaryText">
                             Load More
                         </button>
                     </div>

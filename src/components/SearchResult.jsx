@@ -38,13 +38,14 @@ function SearchResult() {
   }, [username]);
 
   return (
+    <div className='min-h-screen bg-background text-primaryText dark:bg-dark-background dark:text-primaryText'>
     <div>
-      <div className="sticky top-0 z-50 bg-secondaryBackground dark:bg-secondaryBackground">
+      <div className="sticky top-0 z-50 bg-background dark:bg-dark-background">
         <Navbar />
       </div>
 
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl text-primaryText font-bold mb-4">Search Results</h1>
+      <div className="container bg-background dark:bg-dark-background">
+        <h1 className="ml-16 mt-10 text-2xl text-primaryText dark:text-dark-primaryText font-bold mb-4">Search Results</h1>
 
         {error && <p className="text-red-500">{error}</p>}
         
@@ -58,6 +59,7 @@ function SearchResult() {
           <></>
         )}
       </div>
+    </div>
     </div>
   );
 }

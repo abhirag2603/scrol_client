@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { userState } from '../states/atoms';
+import { userState, themeModeState } from '../states/atoms';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; 
+import './switch.css'
 
 const baseUrl = import.meta.env.MODE === 'production' 
     ? import.meta.env.VITE_BASE_URL_RENDER 
@@ -10,9 +11,10 @@ const baseUrl = import.meta.env.MODE === 'production'
 
 const Navbar = () => {
   const [user, setUser] = useRecoilState(userState);
-  const navigate = useNavigate();
+  const [themeMode, setThemeMode] = useRecoilState(themeModeState);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(''); // Added state for search query
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -37,96 +39,87 @@ const Navbar = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search/${searchQuery}`); // Redirect to /search with query
+      navigate(`/search/${searchQuery}`);
     }
   };
 
+  const toggleTheme = () => {
+    const newThemeMode = themeMode === 'light' ? 'dark' : 'light';
+    setThemeMode(newThemeMode);
+    document.documentElement.classList.toggle('dark', newThemeMode === 'dark');
+  };
+
   return (
-    <div className='bg-secondaryBackground h-14 flex justify-between items-center px-8 shadow-md'>
+    <div className='bg-secondaryBackground dark:bg-dark-secondaryBackground h-14 flex justify-between items-center px-8 shadow-md'>
       <div className='flex items-center cursor-pointer' onClick={() => navigate('/')}>
         <img className='w-8' src='/ScrolLogo2.png' alt='Scrol Logo'/>
-        <h1 className='text-primaryText font-semibold ml-2'>SCROL</h1>
+        <h1 className='text-primaryText dark:text-dark-primaryText font-semibold ml-2'>SCROL</h1>
       </div>
 
       {user && (
         <div className='flex-grow flex justify-center items-center'>
           <form 
             method="GET" 
-            className='relative text-gray-600 focus-within:text-gray-400 w-1/2'
-            onSubmit={handleSearchSubmit} // Updated to handle form submission
+            className='relative w-1/2 max-w-md'
+            onSubmit={handleSearchSubmit}
           >
-            <span className='absolute inset-y-0 left-0 flex items-center pl-2'>
-              <button type="submit" className='p-1 focus:outline-none focus:shadow-outline'>
-                <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" className='w-6 h-6'>
-                  <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-              </button>
-            </span>
             <input 
               type="search" 
               name="q" 
-              value={searchQuery} // Bind input to state
-              onChange={(e) => setSearchQuery(e.target.value)} // Update state on change
-              className='py-2 text-sm rounded-md pl-10 focus:outline-none bg-white text-gray-900 w-full'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className='py-2 pl-4 pr-10 rounded-md text-dark-primaryText dark:text-primaryText focus:outline-none bg-dark-secondaryBackground dark:bg-secondaryBackground w-full'
               placeholder="Search..." 
               autoComplete="off" 
             />
+            <button type="submit" className='absolute inset-y-0 right-0 flex items-center pr-2'>
+              <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" className='w-6 h-6'>
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </button>
           </form>
         </div>
       )}
 
-      {user && (
-        <div className='flex items-center space-x-4 relative'>
-          <button
-            onClick={toggleDropdown}
-            className='lg:hidden bg-primaryAccent hover:bg-secondaryAccent text-buttonText font-semibold px-4 py-2 rounded'
-          >
-            Menu
-          </button>
-
-          <ul className={`${showDropdown ? 'absolute top-12 right-0 flex flex-col items-center bg-secondaryBackground border border-gray-100 rounded shadow-lg z-10' : 'hidden'}`}>
-            <li 
-              className="text-primaryText font-semibold py-2 px-4 hover:bg-primaryAccent cursor-pointer w-full text-center"
-              onClick={() => { toggleDropdown(); navigate('/'); }}
-            >
-              Home
-            </li>
-            <li 
-              className="text-primaryText font-semibold py-2 px-4 hover:bg-primaryAccent cursor-pointer w-full text-center"
-              onClick={() => { toggleDropdown(); navigate(`/profile/${user._id}`); }}
-            >
-              Profile
-            </li>
-            <li 
-              className="text-primaryText font-semibold py-2 px-4 hover:bg-primaryAccent cursor-pointer w-full text-center"
-              onClick={handleLogout}
-            >
-              Logout
-            </li>
-          </ul>
-
-          <div className='hidden lg:flex lg:items-center lg:space-x-4'>
-            <button
-              onClick={() => navigate('/')}
-              className='text-primaryText font-semibold hover:text-primaryAccent'
-            >
-              Home
-            </button>
-            <button
-              onClick={() => navigate(`/profile/${user._id}`)}
-              className='text-primaryText font-semibold hover:text-primaryAccent'
-            >
-              Profile
-            </button>
-            <button
-              onClick={handleLogout}
-              className='bg-primaryAccent hover:bg-secondaryAccent text-buttonText font-semibold px-4 py-2 rounded'
-            >
-              Logout
-            </button>
+      <div className='flex items-center space-x-4 relative'>
+        {user && (
+          <>
+            <div className='relative'>
+              <button
+                onClick={toggleDropdown}
+                className=' text-buttonText dark:text-dark-buttonText font-semibold px-4 py-2 rounded'
+              >
+                <img
+                  alt="User Avatar"
+                  src={user.avatar}
+                  className='w-10 h-10 rounded-full'
+                />
+              </button>
+              <ul className={`${showDropdown ? 'absolute top-12 right-0 flex flex-col items-center bg-secondaryBackground dark:bg-dark-secondaryBackground border border-gray-100 rounded shadow-lg z-10' : 'hidden'}`}>
+                <li 
+                  className="text-primaryText dark:text-dark-primaryText font-semibold py-2 px-4 hover:bg-primaryAccent cursor-pointer w-full text-center"
+                  onClick={() => { toggleDropdown(); navigate(`/profile/${user._id}`); }}
+                >
+                  Profile
+                </li>
+                <li 
+                  className="text-primaryText dark:text-dark-primaryText font-semibold py-2 px-4 hover:bg-primaryAccent cursor-pointer w-full text-center"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          </>
+        )}
+        
+        <label className="ui-switch">
+          <input type="checkbox" checked={themeMode === 'dark'} onChange={toggleTheme} />
+          <div className="slider">
+            <div className="circle"></div>
           </div>
-        </div>
-      )}
+        </label>
+      </div>
     </div>
   );
 };

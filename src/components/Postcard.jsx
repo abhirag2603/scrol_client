@@ -75,7 +75,7 @@ const PostCard = ({
   };
 
   return (
-    <div className="bg-secondaryBackground text-primaryText rounded-lg shadow-lg overflow-hidden my-4 mx-auto max-w-md sm:max-w-sm md:max-w-lg">
+    <div className="bg-secondaryBackground dark:bg-dark-secondaryBackground text-primaryText rounded-lg shadow-lg overflow-hidden my-4 mx-auto max-w-md sm:max-w-sm md:max-w-lg">
       <div className="p-4 flex items-center space-x-4">
         {userPicturePath && (
           <img
@@ -87,7 +87,7 @@ const PostCard = ({
         )}
         <div className="flex justify-between w-full">
           <h2
-            className="text-primaryText text-lg font-semibold cursor-pointer"
+            className="text-primaryText dark:text-dark-primaryText text-lg font-semibold cursor-pointer"
             onClick={redirectToProfile}
           >
             {firstName} {lastName} (@{username})
@@ -110,7 +110,7 @@ const PostCard = ({
         />
       )}
       <div className="p-4">
-        <p className="text-primaryText mb-2 break-words">{description}</p>
+        <p className="text-primaryText dark:text-dark-primaryText mb-2 break-words">{description}</p>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1">
             <svg
@@ -128,7 +128,7 @@ const PostCard = ({
                 d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
               />
             </svg>
-            <span className="text-primaryText">{likeCount}</span>
+            <span className="text-primaryText dark:text-dark-primaryText">{likeCount}</span>
           </div>
         </div>
       </div>

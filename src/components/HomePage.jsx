@@ -22,7 +22,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-primaryText dark:bg-background dark:text-primaryText cursor-pointer">
+    <div className="min-h-screen bg-background text-primaryText dark:bg-dark-background dark:text-primaryText cursor-pointer">
       {/* Sticky Navbar */}
       <div className="sticky top-0 z-50 bg-secondaryBackground dark:bg-secondaryBackground">
         <Navbar />

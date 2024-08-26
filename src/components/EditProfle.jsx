@@ -91,49 +91,50 @@ const EditProfile = () => {
   };
 
   return (
+    <div className=''>
     <div>
       <Navbar/>
-    <div className="min-h-screen bg-background text-primaryText flex justify-center items-center">
-      <form onSubmit={handleSubmit} className="bg-secondaryBackground p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
+    <div className="min-h-screen bg-background dark:bg-dark-background text-primaryText flex justify-center items-center">
+      <form onSubmit={handleSubmit} className="bg-secondaryBackground dark:bg-dark-secondaryBackground p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-semibold mb-4 text-primaryText dark:text-dark-primaryText">Edit Profile</h2>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">First Name</label>
+          <label className="block text-sm font-medium mb-1 text-primaryText dark:text-dark-primaryText">First Name</label>
           <input
             type="text"
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-secondaryBackground text-primaryText border border-border"
+            className="w-full p-2 rounded bg-secondaryBackground dark:bg-dark-secondaryBackground text-primaryText dark:text-dark-primaryText border dark:border-dark-border border-border"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Last Name</label>
+          <label className="block text-sm font-medium mb-1 text-primaryText dark:text-dark-primaryText">Last Name</label>
           <input
             type="text"
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-secondaryBackground text-primaryText border border-border"
+            className="w-full p-2 rounded bg-secondaryBackground dark:bg-dark-secondaryBackground text-primaryText dark:text-dark-primaryText border border-border dark:border-dark-border"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Username</label>
+          <label className="block text-sm font-medium mb-1 text-primaryText dark:text-dark-primaryText">Username</label>
           <input
             type="text"
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-secondaryBackground text-primaryText border border-border"
+            className="w-full p-2 rounded bg-secondaryBackground dark:bg-dark-secondaryBackground text-primaryText dark:text-dark-primaryText border dark:border-dark-border border-border"
           />
         </div>
 
-        <label className="block text-sm font-medium mb-1">Avatar</label>
+        <label className="block text-sm font-medium mb-1 text-primaryText dark:text-dark-primaryText">Avatar</label>
         <div
           {...getRootProps()}
-          className={`mb-4 p-4 border-2 border-dashed border-border rounded cursor-pointer ${
+          className={`mb-4 p-4 dark:text-dark-primaryText text-primaryText border-2 border-dashed border-border rounded dark:border-dark-border cursor-pointer ${
             isDragActive ? 'border-primaryAccent' : ''
           }`}
         >
@@ -150,13 +151,13 @@ const EditProfile = () => {
                   setAvatarFile(null);
                   setPreview('');
                 }}
-                className="absolute top-2 right-2 text-secondaryText hover:text-primaryText"
+                className="absolute top-2 right-2 text-secondaryText hover:text-primaryText hover:dark:text-dark-primaryText"
               >
                 X
               </button>
             </div>
           ) : isDragActive ? (
-            <p>Drop the file here...</p>
+            <p className=''>Drop the file here...</p>
           ) : (
             <p>Drag 'n' drop a file here, or click to select one</p>
           )}
@@ -186,6 +187,7 @@ const EditProfile = () => {
           )}
         </button>
       </form>
+    </div>
     </div>
     </div>
   );

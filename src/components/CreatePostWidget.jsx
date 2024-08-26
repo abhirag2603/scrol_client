@@ -70,12 +70,12 @@ const CreatePostWidget = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="bg-secondaryBackground text-primaryText shadow-lg rounded-lg overflow-hidden p-4">
-      <h2 className="text-xl font-semibold mb-4">Create a Post</h2>
+    <div className="bg-secondaryBackground dark:bg-dark-secondaryBackground text-primaryText dark:text-dark-primaryText shadow-lg rounded-lg overflow-hidden p-4">
+      <h2 className="text-xl text-primaryText dark:text-dark-primaryText font-semibold mb-4">Create a Post</h2>
 
       <div 
         {...getRootProps()} 
-        className={`border-2 border-border bg-background text-primaryText rounded p-4 mb-4 ${
+        className={`border-2 border-border dark:border-dark-border dark:bg-dark-background text-primaryText rounded p-4 mb-4 ${
           isDragActive ? 'border-primaryAccent' : ''
         }`}
       >
@@ -98,7 +98,7 @@ const CreatePostWidget = ({ onPostCreated }) => {
             </button>
           </div>
         ) : (
-          <p>{isDragActive ? 'Drop the file here...' : 'Drag \'n\' drop a file here, or click to select one'}</p>
+          <p className='text-primaryText dark:text-dark-primaryText'>{isDragActive ? 'Drop the file here...' : 'Drag \'n\' drop a file here, or click to select one'}</p>
         )}
       </div>
 
@@ -106,7 +106,7 @@ const CreatePostWidget = ({ onPostCreated }) => {
         value={description}
         onChange={handleDescriptionChange}
         rows="4"
-        className="border border-border bg-background text-primaryText rounded p-2 w-full mb-4"
+        className="border border-border dark:border-dark-border dark:text-dark-primaryText dark:bg-dark-background bg-background text-primaryText rounded p-2 w-full mb-4"
         placeholder="Write a description..."
       />
 

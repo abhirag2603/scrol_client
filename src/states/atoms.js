@@ -48,3 +48,18 @@ export const userState = atom({
     },
   ],
 });
+
+const initialThemeMode = loadFromLocalStorage('themeMode') || 'light';
+
+export const themeModeState = atom({
+  key: 'themeModeState',
+  default: initialThemeMode,
+  effects_UNSTABLE: [
+    ({ onSet }) => {
+      onSet((newValue) => {
+        saveToLocalStorage('themeMode', newValue);
+        document.body.className = newValue; // Apply the theme to the body class
+      });
+    },
+  ],
+});
