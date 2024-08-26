@@ -60,7 +60,7 @@ const Navbar = () => {
         <div className='flex-grow flex justify-center items-center'>
           <form 
             method="GET" 
-            className='relative w-1/2 max-w-md'
+            className='relative w-1/2 max-w-md ml-10 lg:ml-14 md:ml-20 min-w-20'
             onSubmit={handleSearchSubmit}
           >
             <input 
