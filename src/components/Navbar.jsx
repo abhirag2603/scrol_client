@@ -88,12 +88,14 @@ const Navbar = () => {
               <button
                 onClick={toggleDropdown}
                 className=' text-buttonText dark:text-dark-buttonText font-semibold px-4 py-2 rounded'
-              >
+              >{user.avatar?
                 <img
                   alt="User Avatar"
                   src={user.avatar}
                   className='w-10 h-10 rounded-full'
-                />
+                />:
+                <p>User</p>
+              }
               </button>
               <ul className={`${showDropdown ? 'absolute top-12 right-0 flex flex-col items-center bg-secondaryBackground dark:bg-dark-secondaryBackground border border-gray-100 rounded shadow-lg z-10' : 'hidden'}`}>
                 <li 
