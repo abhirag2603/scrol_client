@@ -88,14 +88,22 @@ const Navbar = () => {
               <button
                 onClick={toggleDropdown}
                 className=' text-buttonText dark:text-dark-buttonText font-semibold px-4 py-2 rounded'
-              >{user.avatar?
+              > <div className='hidden md:flex items-center'>
+              {user.avatar ? (
                 <img
                   alt="User Avatar"
                   src={user.avatar}
                   className='w-10 h-10 rounded-full'
-                />:
+                />
+              ) : (
                 <p>User</p>
-              }
+              )}
+            </div>
+            <div className='md:hidden flex items-center'>
+              <svg className='w-8 h-8 text-primaryAccent' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' viewBox='0 0 24 24'>
+                <path d='M6 9h12M6 15h12'></path>
+              </svg>
+            </div>
               </button>
               <ul className={`${showDropdown ? 'absolute top-12 right-0 flex flex-col items-center bg-secondaryBackground dark:bg-dark-secondaryBackground border border-gray-100 rounded shadow-lg z-10' : 'hidden'}`}>
                 <li 
