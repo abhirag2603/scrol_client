@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { userState } from '../states/atoms';
+import Modal from './Modal'; // Import a modal component (can use a library or custom component)
 
 const baseUrl = import.meta.env.MODE === 'production' 
     ? import.meta.env.VITE_BASE_URL_RENDER 
@@ -23,12 +24,33 @@ const PostCard = ({
 }) => {
   const likeCount = Object.keys(likes).length;
   const [liked, setLiked] = useState(false);
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false); // For toggling comments modal
+  const [comments, setComments] = useState([]); // To store comments
+  const [newComment, setNewComment] = useState(''); // For new comment input
   const navigate = useNavigate();
   const [user] = useRecoilState(userState);
 
   useEffect(() => {
     setLiked(likes[user._id] || false);
   }, [likes, user._id]);
+
+  useEffect(() => {
+    if (isCommentsOpen) {
+      // Fetch comments when the modal is opened
+      const fetchComments = async () => {
+        try {
+          const response = await axios.get(`${baseUrl}/posts/getcomments/${postId}`, {
+            withCredentials: true,
+          });
+          setComments(response.data);
+        } catch (error) {
+          console.error('Error fetching comments:', error);
+        }
+      };
+
+      fetchComments();
+    }
+  }, [isCommentsOpen, postId]);
 
   const handleLike = async () => {
     try {
@@ -67,6 +89,55 @@ const PostCard = ({
       } catch (error) {
         console.error('Error deleting post:', error);
       }
+    }
+  };
+
+  const handleCommentClick = () => {
+    setIsCommentsOpen(true);
+  };
+
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/posts/getcomments/${postId}`, {
+        withCredentials: true,
+      });
+      setComments(response.data);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
+  };
+
+  const handleAddComment = async () => {
+    try {
+      await axios.post(
+        `${baseUrl}/posts/addcomment`,
+        { content: newComment, postId },
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      setNewComment(''); // Clear the input field
+      fetchComments(); // Refetch comments after adding a new one
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`${baseUrl}/posts/delete/${commentId}`, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      // Remove the deleted comment from the state
+      fetchComments();
+    } catch (error) {
+      console.error('Error deleting comment:', error);
     }
   };
 
@@ -130,8 +201,74 @@ const PostCard = ({
             </svg>
             <span className="text-primaryText dark:text-dark-primaryText">{likeCount}</span>
           </div>
+          <button
+            className="text-primaryText dark:text-dark-primaryText"
+            onClick={handleCommentClick}
+          >
+            Comment
+          </button>
         </div>
       </div>
+      {isCommentsOpen && (
+        <Modal onClose={() => setIsCommentsOpen(false)}>
+          <div className="p-4 bg-secondaryBackground dark:bg-dark-secondaryBackground rounded-lg shadow-lg">
+            {picture && (
+              <img
+                className="w-full object-contain rounded-lg mb-4"
+                src={picture}
+                alt="Post"
+              />
+            )}    
+            <div>
+            <p className="text-primaryText font-semibold dark:text-dark-primaryText mb-2 break-words">{username}</p>
+            <p className="text-primaryText dark:text-dark-primaryText mb-2 break-words">{description}</p>
+            </div>
+            <h3 className="text-lg text-primaryAccent font-semibold mb-2">Comments</h3>
+            <div className="max-h-64 overflow-y-auto mb-4">
+              {comments.length > 0 ? (
+                comments.map((comment) => (
+                  <div key={comment._id} className="mb-2 flex justify-between items-center">
+                    <p className="text-sm text-secondaryText dark:text-dark-secondaryText">
+                      {comment.user ? (
+                        <>
+                          <strong className="font-semibold">{comment.user.username}:</strong> {comment.content}
+                        </>
+                      ) : (
+                        `User: ${comment.content}` // Fallback in case user is not available
+                      )}
+                    </p>
+                    {comment.userId === user._id && (
+                      <button
+                        className="text-red-500 hover:text-red-700 ml-2"
+                        onClick={() => handleDeleteComment(comment._id)}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400">No comments yet.</p>
+              )}
+            </div>
+            <div className="flex items-center space-x-2">
+              <input
+                type="text"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Add a comment..."
+                className="flex-1 p-2 border border-gray-300 rounded"
+              />
+              <button
+                onClick={handleAddComment}
+                className="bg-primaryAccent text-white px-4 py-2 rounded"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
