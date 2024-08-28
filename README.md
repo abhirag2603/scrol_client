@@ -35,3 +35,69 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/yourusername/scrol-client.git
+```
+
+
+Navigate to the project directory:
+
+```bash
+Copy code
+cd scrol-client
+```
+
+Install the dependencies:
+
+```bash
+Copy code
+npm install
+```
+
+or
+
+```bash
+Copy code
+yarn install
+```
+
+Running the Application
+Start the development server:
+
+```bash
+Copy code
+npm start
+```
+
+or
+
+```bash
+Copy code
+yarn start
+```
+
+Open your browser and visit http://localhost:3000 to see the application in action.
+
+Build
+To create a production-ready build:
+
+```bash
+Copy code
+npm run build
+```
+
+or
+
+```bash
+Copy code
+yarn build
+```
+
+Environment Variables
+Create a .env file in the root of the project and add your environment variables. Here is an example:
+
+
+```Copy code
+REACT_APP_API_URL=http://localhost:5000/api
+```
+
+License
+This project is licensed under the MIT License.
