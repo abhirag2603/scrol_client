@@ -41,21 +41,18 @@ git clone https://github.com/yourusername/scrol-client.git
 Navigate to the project directory:
 
 ```bash
-Copy code
 cd scrol-client
 ```
 
 Install the dependencies:
 
 ```bash
-Copy code
 npm install
 ```
 
 or
 
 ```bash
-Copy code
 yarn install
 ```
 
@@ -63,14 +60,12 @@ Running the Application
 Start the development server:
 
 ```bash
-Copy code
 npm start
 ```
 
 or
 
 ```bash
-Copy code
 yarn start
 ```
 
@@ -80,7 +75,6 @@ Build
 To create a production-ready build:
 
 ```bash
-Copy code
 npm run build
 ```
 
