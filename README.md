@@ -22,6 +22,8 @@ Scrol is a full-stack social media application that offers a minimal and clean U
 - **Axios**: Promise-based HTTP client for making API requests.
 - **React Router**: Declarative routing for React applications.
 
+###The backend repository can be found at github.com/abhirag2603/scrol_server
+
 ## Getting Started
 
 ### Prerequisites
