@@ -116,7 +116,9 @@ const Navbar = () => {
                   className="text-primaryText dark:text-dark-primaryText font-semibold py-2 px-4 hover:bg-primaryAccent cursor-pointer w-full text-center"
                   onClick={handleLogout}
                 >
-                  Logout
+                  <span class="material-symbols-outlined">
+logout
+</span>
                 </li>
               </ul>
             </div>

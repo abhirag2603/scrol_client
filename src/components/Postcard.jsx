@@ -5,9 +5,9 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../states/atoms';
 import Modal from './Modal'; // Import a modal component (can use a library or custom component)
 
-const baseUrl = import.meta.env.MODE === 'production' 
-    ? import.meta.env.VITE_BASE_URL_RENDER 
-    : import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrl = import.meta.env.MODE === 'production'
+  ? import.meta.env.VITE_BASE_URL_RENDER
+  : import.meta.env.VITE_BASE_URL_LOCAL;
 
 const PostCard = ({
   postId,
@@ -64,7 +64,7 @@ const PostCard = ({
             'Content-Type': 'application/json',
           },
         }
-      ); 
+      );
       onLike(); // Refresh posts after liking
     } catch (error) {
       console.error('Error liking post:', error);
@@ -165,10 +165,12 @@ const PostCard = ({
           </h2>
           {user._id === userId && (
             <button
-              className="ml-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+              className="ml-4 bg-red-500 text-white px-2 py-1 flex rounded hover:bg-red-600"
               onClick={handleDelete}
             >
-              Delete
+              <span class="material-symbols-outlined">
+                delete
+              </span>
             </button>
           )}
         </div>
@@ -202,10 +204,12 @@ const PostCard = ({
             <span className="text-primaryText dark:text-dark-primaryText">{likeCount}</span>
           </div>
           <button
-            className="text-primaryText dark:text-dark-primaryText"
+            className="text-primaryText flex dark:text-dark-primaryText"
             onClick={handleCommentClick}
           >
-            Comment
+            <span class="material-symbols-outlined">
+              comment
+            </span>
           </button>
         </div>
       </div>
@@ -218,10 +222,10 @@ const PostCard = ({
                 src={picture}
                 alt="Post"
               />
-            )}    
+            )}
             <div>
-            <p className="text-primaryText font-semibold dark:text-dark-primaryText mb-2 break-words">{username}</p>
-            <p className="text-primaryText dark:text-dark-primaryText mb-2 break-words">{description}</p>
+              <p className="text-primaryText font-semibold dark:text-dark-primaryText mb-2 break-words">{username}</p>
+              <p className="text-primaryText dark:text-dark-primaryText mb-2 break-words">{description}</p>
             </div>
             <h3 className="text-lg text-primaryAccent font-semibold mb-2">Comments</h3>
             <div className="max-h-64 overflow-y-auto mb-4">
@@ -242,7 +246,9 @@ const PostCard = ({
                         className="text-red-500 hover:text-red-700 ml-2"
                         onClick={() => handleDeleteComment(comment._id)}
                       >
-                        Delete
+                        <span class="material-symbols-outlined">
+                          delete
+                        </span>
                       </button>
                     )}
                   </div>
@@ -261,9 +267,11 @@ const PostCard = ({
               />
               <button
                 onClick={handleAddComment}
-                className="bg-primaryAccent text-white px-4 py-2 rounded"
+                className="bg-primaryAccent text-white flex px-4 py-2 rounded"
               >
-                Add
+                <span class="material-symbols-outlined">
+                  add_comment
+                </span>
               </button>
             </div>
           </div>

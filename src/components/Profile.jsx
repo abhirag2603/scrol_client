@@ -10,13 +10,13 @@ import FriendCard from './FriendCard';
 import FriendRequestCard from './FriendRequestCard';
 import './scrollbar.css'; // Adjust the path as necessary
 
-const baseUrl = import.meta.env.MODE === 'production' 
-    ? import.meta.env.VITE_BASE_URL_RENDER 
-    : import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrl = import.meta.env.MODE === 'production'
+  ? import.meta.env.VITE_BASE_URL_RENDER
+  : import.meta.env.VITE_BASE_URL_LOCAL;
 
 const Profile = () => {
   const { userId } = useParams();
-  const [user, setUser] = useRecoilState(userState); 
+  const [user, setUser] = useRecoilState(userState);
   const [profile, setProfile] = useState({});
   const [posts, setPosts] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -103,7 +103,7 @@ const Profile = () => {
       await axios.delete(`${baseUrl}/users/${user._id}/friends/${userId}`, {
         withCredentials: true,
       });
-      await updateUserState(); 
+      await updateUserState();
       fetchProfile(); // Refresh the profile data after removal
     } catch (error) {
       console.error('Error removing friend:', error);
@@ -161,10 +161,12 @@ const Profile = () => {
               {user && user._id === profile._id && (<p className="text-secondaryText dark:text-dark-secondaryText mt-2">{profile.email}</p>)}
               {user && user._id === profile._id && (
                 <button
-                  className="mt-2 px-4 py-2 rounded bg-primaryAccent hover:bg-secondaryAccent text-buttonText"
+                  className="mt-2 px-4 py-2 rounded bg-primaryAccent flex hover:bg-secondaryAccent text-buttonText"
                   onClick={() => navigate(`/edit-profile`)}
                 >
-                  Edit Profile
+                  <span class="material-symbols-outlined">
+                    edit
+                  </span>Edit Profile
                 </button>
               )}
             </div>
@@ -175,14 +177,20 @@ const Profile = () => {
             </div>
           )}
           {user && user._id !== profile._id && (
-            <button
-              className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : hasSentRequest ? 'bg-yellow-500' : 'bg-green-600'} text-buttonText`}
-              onClick={handleButtonClick}
-              disabled={hasSentRequest && !isFriend}
-            >
-              {isFriend ? 'Remove Friend' : hasSentRequest ? 'Pending' : 'Add Friend'}
-            </button>
-          )}
+  <button
+    className={`mt-4 md:mt-0 ml-4 px-4 py-2 rounded ${isFriend ? 'bg-red-600' : hasSentRequest ? 'bg-yellow-500' : 'bg-green-600'} text-buttonText`}
+    onClick={handleButtonClick}
+    disabled={hasSentRequest && !isFriend}
+  >
+    {isFriend ? (
+      <div className='flex'>Remove Friend <span class="material-symbols-outlined">remove</span></div>
+    ) : hasSentRequest ? (
+      <div className='flex'>Pending <span class="material-symbols-outlined">pending</span></div>
+    ) : (
+      <div className='flex'>Add Friend <span class="material-symbols-outlined">add</span></div>
+    )}
+  </button>
+)}
         </div>
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Posts</h2>
@@ -237,13 +245,13 @@ const Profile = () => {
                 {friendRequests.map(requestId => (
                   requestId && (
                     <div className='min-w-max'>
-                    <FriendRequestCard
-                      key={requestId}
-                      requestId={requestId}
-                      onAccept={handleAcceptRequest}
-                      onReject={handleRejectRequest}
-                    />
-                      </div>
+                      <FriendRequestCard
+                        key={requestId}
+                        requestId={requestId}
+                        onAccept={handleAcceptRequest}
+                        onReject={handleRejectRequest}
+                      />
+                    </div>
                   )
                 ))}
               </div>

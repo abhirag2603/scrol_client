@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userState } from '../states/atoms';
 
-const baseUrl = import.meta.env.MODE === 'production' 
-    ? import.meta.env.VITE_BASE_URL_RENDER 
-    : import.meta.env.VITE_BASE_URL_LOCAL;
+const baseUrl = import.meta.env.MODE === 'production'
+  ? import.meta.env.VITE_BASE_URL_RENDER
+  : import.meta.env.VITE_BASE_URL_LOCAL;
 
 const FriendRequestCard = ({ requestId, onAccept, onReject }) => {
   const [requestUser, setRequestUser] = useState(null);
@@ -85,9 +85,9 @@ const FriendRequestCard = ({ requestId, onAccept, onReject }) => {
   return (
     <div className="bg-secondaryBackground dark:bg-dark-secondaryBackground text-primaryText min-w-[20rem] flex items-center p-4 rounded-xl shadow border cursor-pointer hover:shadow-lg transition-shadow">
       <div className="flex items-center space-x-4">
-        <img 
-          src={requestUser.avatar || 'https://via.placeholder.com/64'} 
-          alt={`${requestUser.username}'s profile`} 
+        <img
+          src={requestUser.avatar || 'https://via.placeholder.com/64'}
+          alt={`${requestUser.username}'s profile`}
           className="w-16 h-16 rounded-full border-2 border-primaryAccent"
           onClick={handleProfileClick}
         />
@@ -101,17 +101,21 @@ const FriendRequestCard = ({ requestId, onAccept, onReject }) => {
         </div>
       </div>
       <div className="flex space-x-4">
-        <button 
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+        <button
+          className="bg-green-600 text-white px-4 py-2 flex rounded hover:bg-green-700 transition"
           onClick={handleAccept}
         >
-          Accept
+          <span class="material-symbols-outlined">
+            check
+          </span>
         </button>
-        <button 
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+        <button
+          className="bg-red-600 text-white px-4 py-2 rounded flex hover:bg-red-700 transition"
           onClick={handleDecline}
         >
-          Decline
+          <span class="material-symbols-outlined">
+            close
+          </span>
         </button>
       </div>
     </div>
