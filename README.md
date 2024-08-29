@@ -104,5 +104,33 @@ This project is licensed under the MIT License.
 
 ## Screenshots
 
-## Homepage 
+### Homepage 
 ![Screenshot](./public/SS_home_dark.png)
+![Screenshot](./public/SS_home_light.png)
+
+### Mini dropdown
+
+!![Screenshot](./public/SS_dropdown.png)
+
+### User profile page(own)
+
+![Screenshot](./public/SS_profile1.png)
+![Screenshot](./public/SS_profile2.png)
+![Screenshot](./public/SS_profile_light.png)
+
+### Edit profile page
+
+![Screenshot](./public/SS_editpage.png)
+
+### User profile page (others)
+
+![Screenshot](./public/SS_otherprofile.png)
+
+### Search results
+
+![Screenshot](./public/SS_searchresult.png)
+
+### Post Modal(add/read/delete comments)
+
+![Screenshot](./public/SS_comment.png)
+
