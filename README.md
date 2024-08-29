@@ -105,4 +105,4 @@ This project is licensed under the MIT License.
 ## Screenshots
 
 ## Homepage 
-![home](SS_homedark.png)
+![home](SS_home_dark.png)
