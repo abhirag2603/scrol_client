@@ -24,7 +24,8 @@ Scrol is a full-stack social media application that offers a minimal and clean U
 
 ### The backend repository can be found at https://github.com/abhirag2603/Scrol-server
 
-## Screenshots:
+
+### Screenshots are at the end of readme.md
 
 
 ## Getting Started
@@ -100,3 +101,8 @@ REACT_APP_API_URL=http://localhost:5000/api
 
 License
 This project is licensed under the MIT License.
+
+## Screenshots
+
+## Homepage 
+![home](/SS_homedark.png)
