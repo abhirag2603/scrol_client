@@ -24,6 +24,9 @@ Scrol is a full-stack social media application that offers a minimal and clean U
 
 ### The backend repository can be found at https://github.com/abhirag2603/Scrol-server
 
+## Screenshots:
+
+
 ## Getting Started
 
 ### Prerequisites
@@ -36,7 +39,7 @@ Scrol is a full-stack social media application that offers a minimal and clean U
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/scrol-client.git
+git clone https://github.com/abhirag2603/scrol-client.git
 ```
 
 
